@@ -1,13 +1,14 @@
 require 'base64'
 require 'fileutils'
 require 'rubygems'
-require 'mongoid'
+require 'em-redis'
+#require 'mongoid'
 #require 'em-synchrony'
 #require 'em-synchrony/em-redis'
 #require 'em-synchrony/mongoid'
-require File.expand_path(File.join APP_ROOT, "vendor", "em-synchrony", "lib", "em-synchrony.rb")
-require File.expand_path(File.join APP_ROOT, "vendor", "em-synchrony", "lib", "em-synchrony", "em-redis.rb")
-#require File.expand_path(File.join APP_ROOT, "vendor", "em-synchrony", "lib", "em-synchrony", "mongo.rb")
+require File.join("vendor", "em-synchrony", "lib", "em-synchrony.rb")
+require File.join("vendor", "em-synchrony", "lib", "em-synchrony", "em-redis.rb")
+#require File.expand_path(File.join "vendor", "em-synchrony", "lib", "em-synchrony", "mongo.rb")
 require 'thin'
 require 'sinatra/async'
 require 'em-websocket'

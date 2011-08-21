@@ -1,5 +1,5 @@
 begin
-  require File.expand_path(File.join APP_ROOT, "vendor", "em-redis-0.3.0", "lib", 'em-redis.rb')
+  require File.join("vendor", "em-redis-0.3.0", "lib", 'em-redis.rb')
 rescue LoadError => error
   raise 'Missing EM-Synchrony dependency: gem install em-redis'
 end

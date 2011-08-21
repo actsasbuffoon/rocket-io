@@ -72,7 +72,6 @@ class Rocket
       
       @redis = EM::Protocols::Redis.connect
       @redis_message_queue_connection = EM::Protocols::Redis.connect
-      
       @server_id = @redis.incr "server_ids"
       process_message_queue
       
@@ -99,7 +98,6 @@ class Rocket
           }.resume
         end
       end
-      
       Rack::Handler::Thin.run StaticController, Port: 9346
     end
   end
