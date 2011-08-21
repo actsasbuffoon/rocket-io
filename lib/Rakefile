@@ -1,0 +1,4 @@
+desc "Create a new Rocket.io project"
+task :create, [:name] do |t, args|
+  puts args.inspect
+end

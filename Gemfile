@@ -3,6 +3,15 @@ source "http://rubygems.org"
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 
+gem 'mongoid', ">= 2.1.7"
+gem 'thin', ">= 1.2.11"
+gem 'async_sinatra', ">= 0.5.0"
+gem 'em-websocket', ">= 0.3.1"
+gem 'json', ">= 1.5.1"
+gem 'therubyracer', ">= 0.9.3"
+gem 'nokogiri', ">= 1.4.4"
+gem "slop"
+
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 group :development do
