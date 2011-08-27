@@ -99,7 +99,7 @@ desc "Move docs to gh-pages branch"
 task :pages do
   require 'git'
   g = Git.open(".")
-  if g.status.added.keys.length > 0 || g.lib.diff_files.keys.length > 0
+  if g.lib.diff_files.keys.length > 0 || g.status.added.keys.length > 0 || g.status.changed.keys.length > 0 || g.status.deleted.keys.length > 0
     puts "You have uncommitted changes. Aborting."
   else
     Dir["doc_files/output/**/*"].each do |f|
