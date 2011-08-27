@@ -103,14 +103,15 @@ task :pages do
     puts "You have uncommitted changes. Aborting."
   else
     puts "Copying files outside root"
-    FileUtils.cp_r "doc_files", ".."
+    fname = "rocket_doc_files_#{Time.now.to_i}"
+    FileUtils.cp_r "doc_files/output", "../#{fname}"
     puts "Checking out gh-pages"
     g.checkout "gh-pages"
     Dir["*"].each {|f| puts "deleting #{f}"; FileUtils.rm_rf f}
-    FileUtils.mv "../doc_files", "."
-    puts "Copying files from doc_files/output"
-    FileUtils.mv "doc_files/output/**/*", "."
+    FileUtils.mv "../#{fname}", "."
+    puts "Copying files from output"
+    Dir["#{fname}/*"].each {|f| FileUtils.mv f, "."}
     puts "Removing doc_files"
-    FileUtils.rm_rf "doc_files"
+    FileUtils.rm_rf fname
   end
 end
