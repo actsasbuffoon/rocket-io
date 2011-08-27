@@ -103,13 +103,19 @@ task :pages do
     puts "You have uncommitted changes. Aborting."
   else
     Dir["doc_files/output/**/*"].each do |f|
+      puts "touch #{f}"
       `touch #{f}`
     end
+    puts "Stashing changes"
     g.lib.stash_save "Prepping GH-PAGES #{Time.now}"
+    puts "Checking out gh-pages"
     g.checkout "gh-pages"
-    Dir["*"].each {|f| FileUtils.rm f}
+    Dir["*"].each {|f| puts "deleting #{f}"; FileUtils.rm_rf f}
+    puts "Applying last stash"
     `git stash pop`
+    puts "Copying files from doc_files/output"
     FileUtils.mv "doc_files/output/**/*", "."
+    puts "Removing doc_files"
     FileUtils.rm_rf "doc_files"
   end
 end
