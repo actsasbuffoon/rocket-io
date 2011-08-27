@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael Tomer"]
-  s.date = %q{2011-08-25}
+  s.date = %q{2011-08-27}
   s.default_executable = %q{rocket}
   s.description = %q{Realtime web applicatioin framework that uses Web Sockets for (nearly) everything}
   s.email = %q{michaeltomer@gmail.com}
@@ -27,6 +27,62 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "bin/rocket",
+    "doc_files/coffee/application.coffee",
+    "doc_files/images/ackbar_trap.jpg",
+    "doc_files/images/cloud1.png",
+    "doc_files/images/cloud2.png",
+    "doc_files/images/cloud3.png",
+    "doc_files/images/cloud4.png",
+    "doc_files/images/cloud5.png",
+    "doc_files/images/cloud6.png",
+    "doc_files/images/cloud7.png",
+    "doc_files/images/ground.png",
+    "doc_files/images/icon_dir.png",
+    "doc_files/images/icon_js.png",
+    "doc_files/images/icon_other.png",
+    "doc_files/images/icon_ruby.png",
+    "doc_files/images/logo.png",
+    "doc_files/images/lolcat.gif",
+    "doc_files/images/wave.jpg",
+    "doc_files/layout.haml",
+    "doc_files/output/Introduction.html",
+    "doc_files/output/ORM_Notes.html",
+    "doc_files/output/Transmission_API.html",
+    "doc_files/output/css/main.css",
+    "doc_files/output/images/ackbar_trap.jpg",
+    "doc_files/output/images/cloud1.png",
+    "doc_files/output/images/cloud2.png",
+    "doc_files/output/images/cloud3.png",
+    "doc_files/output/images/cloud4.png",
+    "doc_files/output/images/cloud5.png",
+    "doc_files/output/images/cloud6.png",
+    "doc_files/output/images/cloud7.png",
+    "doc_files/output/images/ground.png",
+    "doc_files/output/images/icon_dir.png",
+    "doc_files/output/images/icon_js.png",
+    "doc_files/output/images/icon_other.png",
+    "doc_files/output/images/icon_ruby.png",
+    "doc_files/output/images/logo.png",
+    "doc_files/output/images/lolcat.gif",
+    "doc_files/output/images/wave.jpg",
+    "doc_files/output/index.html",
+    "doc_files/output/js/application.js",
+    "doc_files/output/rocco_js/lib/public/javascripts/formtacular.html",
+    "doc_files/output/rocco_js/lib/public/javascripts/rocket.html",
+    "doc_files/output/rocco_js/lib/public/javascripts/rocket_utils.html",
+    "doc_files/output/rocco_rb/lib/lib/rocket.html",
+    "doc_files/output/rocco_rb/lib/lib/rocket/bolt.html",
+    "doc_files/output/rocco_rb/lib/lib/rocket/controller.html",
+    "doc_files/output/rocco_rb/lib/lib/rocket/initializer.html",
+    "doc_files/output/rocco_rb/lib/lib/rocket/monkey_patches.html",
+    "doc_files/output/rocco_rb/lib/lib/rocket/rocket_user.html",
+    "doc_files/output/rocco_rb/lib/lib/rocket/runner.html",
+    "doc_files/output/rocco_rb/lib/rocket-io.html",
+    "doc_files/pages/Introduction.markdown",
+    "doc_files/pages/ORM_Notes.markdown",
+    "doc_files/pages/Transmission_API.markdown",
+    "doc_files/pages/index.markdown",
+    "doc_files/sass/main.sass",
     "lib/lib/rocket.rb",
     "lib/lib/rocket/bolt.rb",
     "lib/lib/rocket/controller.rb",
@@ -34,7 +90,7 @@ Gem::Specification.new do |s|
     "lib/lib/rocket/monkey_patches.rb",
     "lib/lib/rocket/rocket_user.rb",
     "lib/lib/rocket/runner.rb",
-    "lib/public/html/main.html",
+    "lib/public/javascripts/app.js",
     "lib/public/javascripts/formtacular.js",
     "lib/public/javascripts/jade.js",
     "lib/public/javascripts/jquery.js",
@@ -92,7 +148,8 @@ Gem::Specification.new do |s|
     "lib/vendor/em-synchrony/spec/tcpsocket_spec.rb",
     "rocket-io.gemspec",
     "test/helper.rb",
-    "test/test_rocket-io.rb"
+    "test/test_rocket-io.rb",
+    "utils.rb"
   ]
   s.homepage = %q{http://github.com/actsasbuffoon/rocket-io}
   s.licenses = ["MIT"]
@@ -114,6 +171,12 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<slop>, [">= 0"])
       s.add_runtime_dependency(%q<rocco>, [">= 0"])
       s.add_runtime_dependency(%q<pygmentize>, [">= 0"])
+      s.add_runtime_dependency(%q<haml>, [">= 0"])
+      s.add_runtime_dependency(%q<sass>, [">= 0"])
+      s.add_runtime_dependency(%q<rdiscount>, [">= 0"])
+      s.add_runtime_dependency(%q<coffee-script>, [">= 0"])
+      s.add_runtime_dependency(%q<git>, [">= 0"])
+      s.add_runtime_dependency(%q<pygments.rb>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
@@ -129,6 +192,12 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<slop>, [">= 0"])
       s.add_dependency(%q<rocco>, [">= 0"])
       s.add_dependency(%q<pygmentize>, [">= 0"])
+      s.add_dependency(%q<haml>, [">= 0"])
+      s.add_dependency(%q<sass>, [">= 0"])
+      s.add_dependency(%q<rdiscount>, [">= 0"])
+      s.add_dependency(%q<coffee-script>, [">= 0"])
+      s.add_dependency(%q<git>, [">= 0"])
+      s.add_dependency(%q<pygments.rb>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
@@ -145,6 +214,12 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<slop>, [">= 0"])
     s.add_dependency(%q<rocco>, [">= 0"])
     s.add_dependency(%q<pygmentize>, [">= 0"])
+    s.add_dependency(%q<haml>, [">= 0"])
+    s.add_dependency(%q<sass>, [">= 0"])
+    s.add_dependency(%q<rdiscount>, [">= 0"])
+    s.add_dependency(%q<coffee-script>, [">= 0"])
+    s.add_dependency(%q<git>, [">= 0"])
+    s.add_dependency(%q<pygments.rb>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
