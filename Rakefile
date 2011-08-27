@@ -151,6 +151,11 @@ namespace :docs do
       Dir["#{fname}/*"].each {|f| FileUtils.mv f, "."}
       puts "Removing doc_files"
       FileUtils.rm_rf fname
+      `git add . -u`
+      `git add .`
+      `git commit -m "Updating documentation for Github Pages"`
+      `git push origin gh-pages`
+      `git checkout master`
     end
   end
 end
