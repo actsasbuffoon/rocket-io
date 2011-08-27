@@ -99,6 +99,17 @@ desc "Move docs to gh-pages branch"
 task :pages do
   require 'git'
   g = Git.open(".")
-  puts g.diff
-  
+  if g.status.added.keys.length > 0 || g.lib.diff_files.keys.length > 0
+    puts "You have uncommitted changes. Aborting."
+  else
+    Dir["doc_files/output/**/*"].each do |f|
+      `touch #{f}`
+    end
+    g.stash_save "Prepping GH-PAGES #{Time.now}"
+    g.checkout "gh-pages"
+    Dir["*"].each {|f| FileUtils.rm f}
+    `git stash pop`
+    FileUtils.mv "doc_files/output/**/*", "."
+    FileUtils.rm_rf "doc_files"
+  end
 end
