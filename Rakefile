@@ -107,7 +107,7 @@ task :pages do
       `touch #{f}`
     end
     puts "Stashing changes"
-    g.lib.stash_save "Prepping GH-PAGES #{Time.now}"
+    `git stash`
     puts "Checking out gh-pages"
     g.checkout "gh-pages"
     Dir["*"].each {|f| puts "deleting #{f}"; FileUtils.rm_rf f}
