@@ -52,66 +52,101 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-desc "Generate all documentation"
-task :docs do
-  puts "Generating documentation"
-  # FileUtils.rm_rf "doc_files/output"
-  # FileUtils.mkdir_p "doc_files/output"
-  puts "Creating Ruby Rocco documentation"
-  # `rocco -l ruby -c \\# -o doc_files/output/rocco_rb lib/*.rb lib/lib/*.rb lib/lib/**/*.rb`
-  puts "Creating Javascript Rocco documentation"
-  # `rocco -l javascript -c // -o doc_files/output/rocco_js lib/public/javascripts/rocket.js lib/public/javascripts/rocket_utils.js lib/public/javascripts/formtacular.js`
-  puts "Compiling SASS"
-  require 'sass'
-  FileUtils.mkdir_p "doc_files/output/css"
-  Dir["doc_files/sass/*.sass"].each do |file|
-   File.open("doc_files/output/css/#{file.split("/").last.sub(/\.sass$/, ".css")}", "w") {|f| f.write Sass::Engine.new(File.read file).render}
+namespace :docs do
+
+  desc "Generate all documentation"
+  task :compile do
+    puts "Generating documentation"
+    ['docs:clear', 'docs:ruby', 'docs:js', 'docs:sass', 'docs:coffee', 'docs:copy_static', 'docs:markdown'].each do |t|
+      Rake::Task[t].invoke
+    end
   end
-  puts "Compiling markdown"
-  require 'haml'
-  require 'rdiscount'
-  Haml::Engine.instance_variable_set "@options".to_sym, {format: :html5}
-  args = {
-    rb_files: Dir["doc_files/output/rocco_rb/**/*.html"],
-    js_files: Dir["doc_files/output/rocco_js/**/*.html"],
-    pages: Dir["doc_files/pages/**/*.markdown"]
-  }
-  Dir["doc_files/pages/*.markdown"].each do |file|
-    File.open("doc_files/output/#{file.split("/").last.sub(/\.markdown$/, ".html")}", "w") do |f|
-      f.write Haml::Engine.new(File.read "doc_files/layout.haml").render(Object.new, args.merge(current_file: file)) do
-        Markdown.new(File.read file).to_html
+
+  desc "Clear doc_files"
+  task :clear do
+    puts "Clearing doc_files"
+    FileUtils.rm_rf "doc_files/output"
+    FileUtils.mkdir_p "doc_files/output"
+  end
+
+  desc "Generate Ruby Rocco docs"
+  task :ruby do
+    puts "Creating Ruby Rocco documentation"
+    `rocco -l ruby -c \\# -o doc_files/output/rocco_rb lib/*.rb lib/lib/*.rb lib/lib/**/*.rb`
+  end
+
+  desc "Generate Javascript Rocco docs"
+  task :js do
+    puts "Creating Javascript Rocco documentation"
+    `rocco -l javascript -c // -o doc_files/output/rocco_js lib/public/javascripts/rocket.js lib/public/javascripts/rocket_utils.js lib/public/javascripts/formtacular.js`
+  end
+
+  desc "Compile SASS into css for docs"
+  task :sass do
+    puts "Compiling SASS"
+    require 'sass'
+    FileUtils.mkdir_p "doc_files/output/css"
+    Dir["doc_files/sass/*.sass"].each do |file|
+     File.open("doc_files/output/css/#{file.split("/").last.sub(/\.sass$/, ".css")}", "w") {|f| f.write Sass::Engine.new(File.read file).render}
+    end
+  end
+
+  desc "Compile markdown docs"
+  task :markdown do
+    puts "Compiling markdown"
+    require 'haml'
+    require 'rdiscount'
+    Haml::Engine.instance_variable_set "@options".to_sym, {format: :html5}
+    args = {
+      rb_files: Dir["doc_files/output/rocco_rb/**/*.html"],
+      js_files: Dir["doc_files/output/rocco_js/**/*.html"],
+      pages: Dir["doc_files/pages/**/*.markdown"]
+    }
+    Dir["doc_files/pages/*.markdown"].each do |file|
+      File.open("doc_files/output/#{file.split("/").last.sub(/\.markdown$/, ".html")}", "w") do |f|
+        f.write Haml::Engine.new(File.read "doc_files/layout.haml").render(Object.new, args.merge(current_file: file)) do
+          Markdown.new(File.read file).to_html
+        end
       end
     end
   end
-  puts "Compiling CoffeeScript"
-  require 'coffee-script'
-  FileUtils.mkdir_p "doc_files/output/js"
-  Dir["doc_files/coffee/*.coffee"].each do |file|
-    File.open("doc_files/output/js/#{file.split("/").last.sub(/\.coffee$/, ".js")}", "w") do |f|
-      f.write CoffeeScript.compile(File.read(file), bare: true)
+
+  desc "Compile CoffeeScript for docs"
+  task :coffee do
+    puts "Compiling CoffeeScript"
+    require 'coffee-script'
+    FileUtils.mkdir_p "doc_files/output/js"
+    Dir["doc_files/coffee/*.coffee"].each do |file|
+      File.open("doc_files/output/js/#{file.split("/").last.sub(/\.coffee$/, ".js")}", "w") do |f|
+        f.write CoffeeScript.compile(File.read(file), bare: true)
+      end
     end
   end
-  puts "Copying images"
-  FileUtils.cp_r "doc_files/images", "doc_files/output/images"
-end
 
-desc "Move docs to gh-pages branch"
-task :pages do
-  require 'git'
-  g = Git.open(".")
-  if g.lib.diff_files.keys.length > 0 || g.status.added.keys.length > 0 || g.status.changed.keys.length > 0 || g.status.deleted.keys.length > 0
-    puts "You have uncommitted changes. Aborting."
-  else
-    puts "Copying files outside root"
-    fname = "rocket_doc_files_#{Time.now.to_i}"
-    FileUtils.cp_r "doc_files/output", "../#{fname}"
-    puts "Checking out gh-pages"
-    g.checkout "gh-pages"
-    Dir["*"].each {|f| puts "deleting #{f}"; FileUtils.rm_rf f}
-    FileUtils.mv "../#{fname}", "."
-    puts "Copying files from output"
-    Dir["#{fname}/*"].each {|f| FileUtils.mv f, "."}
-    puts "Removing doc_files"
-    FileUtils.rm_rf fname
+  desc "Copy static files for docs"
+  task :copy_static do
+    puts "Copying images"
+    FileUtils.cp_r "doc_files/images", "doc_files/output/images"
+  end
+
+  desc "Move docs to gh-pages branch"
+  task :pages do
+    require 'git'
+    g = Git.open(".")
+    if g.lib.diff_files.keys.length > 0 || g.status.added.keys.length > 0 || g.status.changed.keys.length > 0 || g.status.deleted.keys.length > 0
+      puts "You have uncommitted changes. Aborting."
+    else
+      puts "Copying files outside root"
+      fname = "rocket_doc_files_#{Time.now.to_i}"
+      FileUtils.cp_r "doc_files/output", "../#{fname}"
+      puts "Checking out gh-pages"
+      g.checkout "gh-pages"
+      Dir["*"].each {|f| puts "deleting #{f}"; FileUtils.rm_rf f}
+      FileUtils.mv "../#{fname}", "."
+      puts "Copying files from output"
+      Dir["#{fname}/*"].each {|f| FileUtils.mv f, "."}
+      puts "Removing doc_files"
+      FileUtils.rm_rf fname
+    end
   end
 end
