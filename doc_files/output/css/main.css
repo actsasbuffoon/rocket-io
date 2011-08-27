@@ -1,0 +1,60 @@
+html, body {
+  background: #aaaadd;
+  margin: 0px;
+  padding: 0px; }
+
+#footer {
+  background-image: url("../images/ground.png");
+  height: 64px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 10; }
+  #footer p {
+    padding: 10px 40px;
+    color: #bbffbb; }
+
+#topbar {
+  margin-bottom: 15px; }
+  #topbar h1 {
+    position: absolute;
+    top: 10px;
+    left: 120px; }
+
+.row {
+  display: table-row; }
+
+#container {
+  width: 960px;
+  margin: 0px auto;
+  display: table;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 0px 0px 5px 1px black;
+  background: white;
+  position: relative;
+  z-index: 100; }
+  #container #content {
+    background: rgba(255, 255, 255, 0.4);
+    display: table-cell;
+    padding: 10px;
+    z-index: 50;
+    position: relative;
+    border-radius: 0px 10px 10px 0px;
+    width: 100%; }
+  #container #navigation {
+    background: rgba(200, 200, 255, 0.4);
+    display: table-cell;
+    padding: 10px;
+    z-index: 50;
+    position: relative;
+    border-radius: 10px 0px 0px 10px; }
+    #container #navigation ul {
+      list-style: none;
+      padding: 0px;
+      margin: 0px; }
+
+.cloud {
+  position: absolute;
+  z-index: 5; }

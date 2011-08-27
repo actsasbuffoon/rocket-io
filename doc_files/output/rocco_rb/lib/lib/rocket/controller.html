@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>controller.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../rocket.html">rocket.rb</a>
+          <a class="source" href="bolt.html">bolt.rb</a>
+          <a class="source" href="controller.html">controller.rb</a>
+          <a class="source" href="initializer.html">initializer.rb</a>
+          <a class="source" href="monkey_patches.html">monkey_patches.rb</a>
+          <a class="source" href="rocket_user.html">rocket_user.rb</a>
+          <a class="source" href="runner.html">runner.rb</a>
+          <a class="source" href="../../rocket-io.html">rocket-io.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>controller.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p>This file is where everything related to controllers is written.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s2">&quot;base64&quot;</span>
+
+<span class="k">class</span> <span class="nc">Rocket</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>We use a class variable on the Rocket class to hold a hash of all controllers.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="vc">@@controllers</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">controllers</span>
+    <span class="vc">@@controllers</span>
+  <span class="k">end</span>
+  
+  <span class="k">module</span> <span class="nn">Controller</span>
+    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>This callback adds the new class to the controller hash. It strips &ldquo;Controller&rdquo; off
+the end of the class name in order to simplify the API. This way you can call
+&ldquo;rocket(&lsquo;User.Show&rsquo;: {id: 1})&rdquo; rather than &ldquo;rocket(&lsquo;UserController.Show&rsquo;: {id: 1})&rdquo;.
+It also sets up an attr<em>accessor for args, params, and current</em>user.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">bolted</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+      <span class="no">Rocket</span><span class="o">.</span><span class="n">controllers</span><span class="o">[</span><span class="n">other</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sr">/Controller$/</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">=</span> <span class="n">other</span>
+      <span class="n">other</span><span class="o">.</span><span class="n">send</span> <span class="ss">:attr_accessor</span><span class="p">,</span> <span class="ss">:args</span><span class="p">,</span> <span class="ss">:params</span><span class="p">,</span> <span class="ss">:current_user</span>
+    <span class="k">end</span>
+    
+    <span class="k">module</span> <span class="nn">ClassMethods</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>This is how actions are defined. As you can see, it&rsquo;s incredibly simple. Just take the
+block and put it into the actions class instance variable. Note that @action is not an
+instance variable on the object, but an instance variable on the class.</p>
+
+<p>Everything is a class in Ruby, including classes. Since all objects can have instance
+variables, and classes are objects, classes can have instance variables. Make sense?
+If not, check out this great post by John Nunemaker:
+<a href="http://railstips.org/blog/archives/2006/11/18/class-and-instance-variables-in-ruby/">http://railstips.org/blog/archives/2006/11/18/class-and-instance-variables-in-ruby/</a></p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">define_action</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">blk</span><span class="p">)</span>
+        <span class="vi">@actions</span> <span class="o">||=</span> <span class="p">{}</span>
+        <span class="vi">@actions</span><span class="o">[</span><span class="nb">name</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">=</span> <span class="n">blk</span>
+      <span class="k">end</span>
+      </pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Allows you to access the class instance variable, which is tricky otherwise.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">actions</span>
+        <span class="vi">@actions</span>
+      <span class="k">end</span>
+      </pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>This is a controller helper that sets you with with a &ldquo;File First&rdquo; upload.
+It defines two controller actions for the user. Note that the &ldquo;Simple Upload&rdquo;
+does not need a controller action, as everything happens client side.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">file_first</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">blk</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>The first action creates a tempfile and gives the client an ID to reference
+it by. Since a client could upload multiple files simultaneously, this is
+necessary.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="n">define_action</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">_request_tempfile&quot;</span><span class="o">.</span><span class="n">to_sym</span> <span class="k">do</span>
+          <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="s2">_</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">_</span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="s2">_</span><span class="si">#{</span><span class="nb">rand</span><span class="p">(</span><span class="mi">9999999</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="si">}</span><span class="s2">&quot;</span>
+          <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+          <span class="n">current_user</span><span class="o">.</span><span class="n">transmit</span><span class="p">(</span><span class="s2">&quot;App.tempfile&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="nb">id</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="n">req_id</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;req_id&quot;</span><span class="o">]</span><span class="p">})</span>
+        <span class="k">end</span>
+        </pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>The second action receives the base64 encoded file chunks, decodes them, and
+writes them to the temp file. Once the upload is complete, it sends a callback
+to the user to let them know the file is ready.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="n">define_action</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">_receive_file&quot;</span><span class="o">.</span><span class="n">to_sym</span> <span class="k">do</span>
+          <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;id&quot;</span><span class="o">]</span><span class="p">),</span> <span class="s2">&quot;ab&quot;</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span> <span class="no">Base64</span><span class="o">.</span><span class="n">decode64</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="s2">&quot;chunk&quot;</span><span class="o">]</span><span class="p">)}</span>
+          <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;complete&quot;</span><span class="o">]</span>
+            <span class="n">current_user</span><span class="o">.</span><span class="n">transmit</span><span class="p">({</span><span class="s2">&quot;App.finished_upload&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="nb">id</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;id&quot;</span><span class="o">]</span><span class="p">,</span> <span class="n">req_id</span><span class="p">:</span> <span class="n">params</span><span class="o">[</span><span class="s2">&quot;req_id&quot;</span><span class="o">]</span><span class="p">}})</span>
+          <span class="k">end</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+    
+    <span class="k">module</span> <span class="nn">InstanceMethods</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>This is the code that turns your params pseudo hash into a true hash.
+It always groups things as a hash, even things that would normally be
+an array. Arrays come out as as a hash with stringified numbers as keys.
+That will be fixed soon. In fact, I&rsquo;m considering having the client take
+care of generating the params, as I don&rsquo;t see any reason for the server
+to waste time performing the calculations.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">paramify</span><span class="p">(</span><span class="n">hsh</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">hsh</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">hsh</span><span class="o">.</span><span class="n">each_pair</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span>
+          <span class="n">chunks</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">sub</span><span class="sr"> /\]$/</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+          <span class="k">if</span> <span class="n">chunks</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">1</span>
+            <span class="n">iter</span> <span class="o">=</span> <span class="n">t</span>
+            <span class="n">chunks</span><span class="o">.</span><span class="n">each_with_index</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
+              <span class="k">if</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">==</span> <span class="n">chunks</span><span class="o">.</span><span class="n">length</span>
+                <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">v</span>
+              <span class="k">else</span>
+                <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">||=</span> <span class="p">{}</span>
+              <span class="k">end</span>
+              <span class="n">iter</span> <span class="o">=</span> <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span>
+            <span class="k">end</span>
+          <span class="k">else</span>
+            <span class="n">t</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">v</span>
+          <span class="k">end</span>
+        <span class="k">end</span>
+        <span class="n">t</span>
+      <span class="k">end</span>
+      </pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>Link to the class instance variable that holds the actions.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">actions</span>
+        <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">actions</span>
+      <span class="k">end</span>
+      </pre></div>
+      </td>
+    </tr>
+    <tr id='section-11'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-11">&#182;</a>
+        </div>
+        <p>Not a true HTTP redirect obviously, as we aren&rsquo;t using HTTP. This is simply
+how you call one controller action from another.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">redirect</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="no">ROCKET</span><span class="o">.</span><span class="n">parse_command</span><span class="p">(</span><span class="n">current_user</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
+      <span class="k">end</span>
+      </pre></div>
+      </td>
+    </tr>
+    <tr id='section-12'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-12">&#182;</a>
+        </div>
+        <p>This is the method that runs the controller action. It hands over the current
+user, and the paramified args.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">process_command</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">to_sym</span>
+        <span class="k">if</span> <span class="n">actions</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+          <span class="vi">@current_user</span> <span class="o">=</span> <span class="n">user</span>
+          <span class="vi">@params</span> <span class="o">=</span> <span class="n">paramify</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+          <span class="nb">puts</span> <span class="s2">&quot;-&gt; </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
+          <span class="nb">self</span><span class="o">.</span><span class="n">instance_exec</span> <span class="o">&amp;</span><span class="n">actions</span><span class="o">[</span><span class="n">command</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span>
+        <span class="k">else</span>
+          <span class="k">raise</span> <span class="s2">&quot;Class </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2"> does not have an action named </span><span class="si">#{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-13">&#182;</a>
+        </div>
+        <p>Pulls in all of the controllers defined in app/controllers. This should probably
+be recursive to support namespacing.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="no">Dir</span><span class="o">[</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="s2">&quot;controllers&quot;</span><span class="p">,</span> <span class="s2">&quot;*.rb&quot;</span><span class="p">)</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+    <span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+  <span class="k">end</span>
+  
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

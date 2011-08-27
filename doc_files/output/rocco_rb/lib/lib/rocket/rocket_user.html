@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>rocket_user.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../rocket.html">rocket.rb</a>
+          <a class="source" href="bolt.html">bolt.rb</a>
+          <a class="source" href="controller.html">controller.rb</a>
+          <a class="source" href="initializer.html">initializer.rb</a>
+          <a class="source" href="monkey_patches.html">monkey_patches.rb</a>
+          <a class="source" href="rocket_user.html">rocket_user.rb</a>
+          <a class="source" href="runner.html">runner.rb</a>
+          <a class="source" href="../../rocket-io.html">rocket-io.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>rocket_user.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p>This is the class that deals with connected clients. This should probably
+be renamed to client rather than user.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">class</span> <span class="nc">Rocket</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>Stores all connected clients in a hash with their ID as the key.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="vc">@@connected_users</span> <span class="o">=</span> <span class="p">{}</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Adds a client to the hash.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">add_local_user</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="vc">@@connected_users</span><span class="o">[</span><span class="nb">id</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">=</span> <span class="n">user</span>
+  <span class="k">end</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Removes a client from the hash.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">remove_local_user</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    <span class="vc">@@connected_users</span><span class="o">.</span><span class="n">delete</span> <span class="nb">id</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span>
+  <span class="k">end</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Finds a local user.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">get_local_user</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    <span class="vc">@@connected_users</span><span class="o">[</span><span class="nb">id</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span>
+  <span class="k">end</span>
+  
+  <span class="k">class</span> <span class="nc">RocketUser</span>
+    
+    <span class="kp">attr_accessor</span> <span class="ss">:server</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="ss">:web_socket</span><span class="p">,</span> <span class="ss">:web_socket_id</span>
+    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Determines whether or not this server is the one managing a given client&rsquo;s connection.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">local?</span>
+      <span class="no">ROCKET</span><span class="o">.</span><span class="n">server_id</span><span class="o">.</span><span class="n">to_s</span> <span class="o">==</span> <span class="vi">@server</span><span class="o">.</span><span class="n">to_s</span>
+    <span class="k">end</span>
+    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>Creates a new client taking a hash of attributes. The valid attributes are:
+* server
+* id
+* web<em>socket
+* web</em>socket_id</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">args</span> <span class="o">=</span> <span class="p">{})</span>
+      <span class="n">args</span><span class="o">.</span><span class="n">each_pair</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span>
+        <span class="nb">send</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">k</span><span class="si">}</span><span class="s2">=&quot;</span><span class="p">,</span> <span class="n">v</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Allows you to call RocketUser.find(client_id)</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">find</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+      <span class="n">r</span> <span class="o">=</span> <span class="no">ROCKET</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hget</span><span class="p">(</span><span class="s2">&quot;rocket_users&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
+      <span class="n">r</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+      <span class="n">user</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">merge</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;server_id&quot;</span><span class="p">),</span> <span class="n">web_socket_id</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;websocket_id&quot;</span><span class="p">))</span>
+      <span class="n">user</span> <span class="o">=</span> <span class="no">Rocket</span><span class="o">.</span><span class="n">get_local_user</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">web_socket_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">local?</span>
+    <span class="k">end</span>
+    
+    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="n">socket</span><span class="p">)</span>
+      <span class="vi">@id</span> <span class="o">=</span> <span class="no">ROCKET</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">incr</span> <span class="s2">&quot;user_ids&quot;</span>
+      <span class="vi">@server</span> <span class="o">=</span> <span class="no">ROCKET</span><span class="o">.</span><span class="n">server_id</span>
+      <span class="no">ROCKET</span><span class="o">.</span><span class="n">add_local_user</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">signature</span><span class="p">,</span> <span class="no">RocketUser</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="vi">@server</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="vi">@id</span><span class="p">,</span> <span class="n">web_socket</span><span class="p">:</span> <span class="n">socket</span><span class="p">,</span> <span class="n">web_socket_id</span><span class="p">:</span> <span class="n">socket</span><span class="o">.</span><span class="n">signature</span><span class="p">))</span>
+      <span class="no">ROCKET</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">hset</span> <span class="s2">&quot;rocket_users&quot;</span><span class="p">,</span> <span class="vi">@id</span><span class="o">.</span><span class="n">to_s</span><span class="p">,</span> <span class="p">{</span><span class="n">server_id</span><span class="p">:</span> <span class="vi">@server</span><span class="p">,</span> <span class="n">websocket_id</span><span class="p">:</span> <span class="n">socket</span><span class="o">.</span><span class="n">signature</span><span class="p">}</span><span class="o">.</span><span class="n">to_json</span>
+    <span class="k">end</span>
+    
+    <span class="k">def</span> <span class="nf">transmit</span><span class="p">(</span><span class="n">args</span> <span class="o">=</span> <span class="p">{})</span>
+      <span class="nb">puts</span> <span class="s2">&quot;Calling RocketUser.transmit&quot;</span>
+      <span class="k">if</span> <span class="n">local?</span>
+        <span class="nb">puts</span> <span class="s2">&quot;User is local&quot;</span>
+        <span class="vi">@web_socket</span><span class="o">.</span><span class="n">send</span> <span class="n">args</span><span class="o">.</span><span class="n">to_json</span>
+      <span class="k">else</span>
+        <span class="nb">puts</span> <span class="s2">&quot;User is remote&quot;</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">merge!</span> <span class="ss">:rocket_user_id</span> <span class="o">=&gt;</span> <span class="vi">@id</span>
+        <span class="no">ROCKET</span><span class="o">.</span><span class="n">redis</span><span class="o">.</span><span class="n">rpush</span><span class="p">(</span><span class="s2">&quot;message_queue_</span><span class="si">#{</span><span class="no">ROCKET</span><span class="o">.</span><span class="n">server_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">to_json</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+    
+  <span class="k">end</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

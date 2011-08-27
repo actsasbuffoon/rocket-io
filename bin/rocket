@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+require 'slop'
+require 'fileutils'
+LIB_DIR = File.join(File.dirname(__FILE__), '..', 'lib')
+CURRENT_DIR = Dir.pwd
+
+class RocketSetup
+  def initialize(opts)
+    @opts = opts
+  end
+  
+  def create_new_app
+    if File.exist?(@opts[:n])
+      raise "FileAlreadyExists"
+    else
+      create_dirs
+      copy_files
+    end
+  end
+
+  def create_dirs
+    FileUtils.mkdir_p File.join(@opts[:n], "app", "controllers")
+    FileUtils.mkdir_p File.join(@opts[:n], "app", "models")
+    FileUtils.mkdir_p File.join(@opts[:n], "app", "views")
+    FileUtils.mkdir_p File.join(@opts[:n], "config", "initializers")
+    FileUtils.mkdir_p File.join(@opts[:n], "lib")
+    FileUtils.mkdir_p File.join(@opts[:n], "public", "stylesheets")
+    FileUtils.mkdir_p File.join(@opts[:n], "public", "html")
+    FileUtils.mkdir_p File.join(@opts[:n], "public", "images")
+    FileUtils.mkdir_p File.join(@opts[:n], "vendor")
+  end
+
+  def copy_files
+    FileUtils.cp(File.join(LIB_DIR, "lib", "rocket.rb"), File.join(CURRENT_DIR, @opts[:n], "lib"))
+    FileUtils.cp_r(File.join(LIB_DIR, "public", "javascripts"), File.join(CURRENT_DIR, @opts[:n], "public"))
+    File.open(File.join(CURRENT_DIR, @opts[:n], "config", "config.rb"), "w") {|f| f.write "APP_NAME = '#{@opts[:n]}'"}
+  end
+end
+
+opts = Slop.parse do
+  on :n, :app_name, "Application name", true
+  on :h, :help, 'Show this message', :tail => true, do
+    puts help
+    exit
+  end
+end
+
+rs = RocketSetup.new(opts)
+
+if opts[:n]
+  rs.create_new_app
+end

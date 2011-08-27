@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>initializer.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="../rocket.html">rocket.rb</a>
+          <a class="source" href="bolt.html">bolt.rb</a>
+          <a class="source" href="controller.html">controller.rb</a>
+          <a class="source" href="initializer.html">initializer.rb</a>
+          <a class="source" href="monkey_patches.html">monkey_patches.rb</a>
+          <a class="source" href="rocket_user.html">rocket_user.rb</a>
+          <a class="source" href="runner.html">runner.rb</a>
+          <a class="source" href="../../rocket-io.html">rocket-io.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>initializer.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;coffee-script&#39;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>This is where everything related to compiling your Javascript into files
+for the user happens.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">class</span> <span class="nc">Rocket</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>.to_json doesn&rsquo;t normally output functions, so this is a hack to take care of that.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">recursive_object_dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">prev</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="o">[]</span>
+    <span class="k">if</span> <span class="n">prev</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
+      <span class="n">code</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">prev</span><span class="si">}</span><span class="s2"> = {}&quot;</span>
+    <span class="k">end</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span>
+      <span class="nb">p</span> <span class="o">=</span> <span class="n">prev</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="p">?</span> <span class="n">prev</span> <span class="o">+</span> <span class="s2">&quot;.</span><span class="si">#{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">:</span> <span class="n">k</span>
+      <span class="n">code</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">// * * * * * Dump of </span><span class="si">#{</span><span class="nb">p</span><span class="si">}</span><span class="s2"> * * * * *</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+      <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">class</span> <span class="o">==</span> <span class="no">V8</span><span class="o">::</span><span class="no">Object</span>
+        <span class="n">code</span> <span class="o">&lt;&lt;</span> <span class="n">recursive_object_dump</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">p</span><span class="p">)</span>
+      <span class="k">elsif</span> <span class="n">v</span><span class="o">.</span><span class="n">class</span> <span class="o">==</span> <span class="no">V8</span><span class="o">::</span><span class="no">Function</span>
+        <span class="n">code</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">prev</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="k">if</span> <span class="n">prev</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="si">}#{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">#{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="n">code</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">end</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>This takes care of compiling the templates in app/views. This is recursive, so if you
+have app/views/admin/song/index.jade, it will be made available to the client as
+templates.admin.song.index</p>
+
+<p>The views are compiled down to a Javascript function that takes a hash of arguments and
+returns rendered HTML. We only support <a href="http://jade-lang.com">Jade</a> at the moment, but other templating languages
+should be supported in the future.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">compile_templates</span>
+    <span class="nb">puts</span> <span class="s2">&quot;Compiling Templates&quot;</span>
+    <span class="n">js</span> <span class="o">=</span> <span class="no">V8</span><span class="o">::</span><span class="no">Context</span><span class="o">.</span><span class="n">new</span>
+    <span class="n">js</span><span class="o">.</span><span class="n">eval</span> <span class="s2">&quot;window = {}&quot;</span>
+    <span class="n">js</span><span class="o">.</span><span class="n">load</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span> <span class="s2">&quot;javascripts&quot;</span><span class="p">,</span> <span class="s2">&quot;jade.js&quot;</span><span class="p">)</span>
+    <span class="n">js</span><span class="o">.</span><span class="n">load</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span> <span class="s2">&quot;javascripts&quot;</span><span class="p">,</span> <span class="s2">&quot;formtacular.js&quot;</span><span class="p">)</span>
+    <span class="n">js</span><span class="o">.</span><span class="n">load</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span> <span class="s2">&quot;javascripts&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket_utils.js&quot;</span><span class="p">)</span>
+    <span class="n">js</span><span class="o">.</span><span class="n">eval</span> <span class="s2">&quot;var jade = require(&#39;jade&#39;)&quot;</span>
+    <span class="n">js</span><span class="o">.</span><span class="n">eval</span> <span class="s2">&quot;templates = {}&quot;</span>
+    <span class="no">Dir</span><span class="o">[</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="s2">&quot;views&quot;</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="s2">&quot;*.jade&quot;</span><span class="p">)</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+      <span class="k">begin</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sr">/^</span><span class="si">#{</span><span class="no">APP_ROOT</span><span class="si">}</span><span class="sr">\/app\/views/</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">chunks</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+          <span class="n">scrpt</span> <span class="o">=</span> <span class="o">&lt;&lt;-</span><span class="no">EOS</span>
+<span class="sh">            if (templates.#{chunks.slice(0..i).join(&quot;.&quot;)} == undefined) {</span>
+<span class="sh">              templates.#{chunks.slice(0..i).join(&quot;.&quot;)} = {};</span>
+<span class="sh">            };</span>
+<span class="no">          EOS</span>
+            <span class="n">js</span><span class="o">.</span><span class="n">eval</span> <span class="n">scrpt</span>
+        <span class="k">end</span>
+        <span class="n">chunks</span><span class="o">[-</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">chunks</span><span class="o">[-</span><span class="mi">1</span><span class="o">].</span><span class="n">sub</span><span class="p">(</span><span class="sr">/\.jade$/</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">js</span><span class="o">[</span><span class="s1">&#39;template_text&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">js</span><span class="o">.</span><span class="n">eval</span> <span class="s2">&quot;templates.</span><span class="si">#{</span><span class="n">chunks</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="si">}</span><span class="s2"> = jade.compile(template_text)&quot;</span>
+      <span class="k">rescue</span>
+        <span class="k">raise</span> <span class="s2">&quot;ERROR IN TEMPLATE: </span><span class="si">#{</span><span class="n">file</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="vg">$!</span><span class="si">}</span><span class="s2">)&quot;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span> <span class="s2">&quot;javascripts&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket_templates.js&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span> <span class="n">recursive_object_dump</span><span class="p">(</span><span class="n">js</span><span class="o">[</span><span class="s2">&quot;templates&quot;</span><span class="o">]</span><span class="p">,</span> <span class="s2">&quot;templates&quot;</span><span class="p">)}</span>
+    <span class="nb">puts</span> <span class="s2">&quot;Finished compiling templates.&quot;</span>
+  <span class="k">end</span>
+  
+  <span class="c1"># This method takes the controllers defined in app/controllers and sticks them onto a</span>
+  <span class="c1"># variable named &quot;controllers&quot; for the client.</span>
+  <span class="k">def</span> <span class="nf">compile_controllers</span>
+    <span class="nb">puts</span> <span class="s2">&quot;Compiling Controllers&quot;</span>
+    <span class="n">js</span> <span class="o">=</span> <span class="no">V8</span><span class="o">::</span><span class="no">Context</span><span class="o">.</span><span class="n">new</span>
+    <span class="n">js</span><span class="o">.</span><span class="n">eval</span> <span class="s2">&quot;window = {}&quot;</span>
+    <span class="n">js</span><span class="o">.</span><span class="n">eval</span> <span class="s2">&quot;controllers = {}&quot;</span>
+    <span class="no">Dir</span><span class="o">[</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="s2">&quot;controllers&quot;</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="s2">&quot;*.*&quot;</span><span class="p">)</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+      <span class="n">ext</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span>
+      <span class="n">filename</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+      <span class="k">next</span> <span class="k">unless</span> <span class="sx">%w[js coffee]</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+      <span class="n">scrpt</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+      <span class="n">scrpt</span> <span class="o">=</span> <span class="no">CoffeeScript</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">scrpt</span><span class="p">,</span> <span class="n">bare</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;coffee&quot;</span>
+      <span class="n">scrpt</span> <span class="o">=</span> <span class="o">&lt;&lt;-</span><span class="no">EOS</span>
+<span class="sh">#{scrpt}</span>
+<span class="sh">controllers[&#39;#{filename.class_case}Controller&#39;] = new #{filename.class_case}Controller()</span>
+<span class="no">EOS</span>
+      <span class="n">js</span><span class="o">.</span><span class="n">eval</span> <span class="n">scrpt</span>
+    <span class="k">end</span>
+    <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span> <span class="s2">&quot;javascripts&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket_controllers.js&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span> <span class="n">recursive_object_dump</span><span class="p">(</span><span class="n">js</span><span class="o">[</span><span class="s2">&quot;controllers&quot;</span><span class="o">]</span><span class="p">,</span> <span class="s2">&quot;controllers&quot;</span><span class="p">)}</span>
+    <span class="nb">puts</span> <span class="s2">&quot;Finished Compiling Controllers&quot;</span>
+  <span class="k">end</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Just calls the other two methods.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="k">def</span> <span class="nf">prepare_js</span>
+    <span class="n">compile_templates</span>
+    <span class="n">compile_controllers</span>
+  <span class="k">end</span>
+  
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

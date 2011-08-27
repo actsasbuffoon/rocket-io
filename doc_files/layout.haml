@@ -1,0 +1,38 @@
+!!!
+%html
+  %head
+    %title
+    %link{rel: "stylesheet", type: "text/css", href: "css/main.css"}
+    %script{type: "text/javascript", src: "../../lib/public/javascripts/jquery.js"}
+    %script{type: "text/javascript", src: "js/application.js"}
+  %body
+    #wrapper
+      #topbar
+        %img#logo{src: "images/logo.png"}
+        %h1 Rocket.io Documentation
+      #container
+        .row
+          #navigation
+            %h3 Pages
+            %ul
+              - pages.each do |pg|
+                %li
+                  - file_name = pg.split("/").last.split(".").first
+                  %a{href: "#{file_name}.html"}= file_name.gsub("_", " ")
+            %h3 Ruby Source
+            %ul
+              - rb_files.each do |pg|
+                %li
+                  - file_name = pg.split("/")[4..-1].join("/")
+                  %a{href: "rocco_rb/lib/#{file_name}"}= file_name
+            %h3 Javascript Source
+            %ul
+              - js_files.each do |pg|
+                %li
+                  - file_name = pg.split("/")[6..-1].join("/")
+                  %a{href: "rocco_js/lib/public/javascripts/#{file_name}"}= file_name
+          #content
+            %h2#content_header= current_file.split("/")[2..-1].join("/")
+            = yield
+      #footer
+        %p Rocket.io and all associated content are licensed under the MIT license.
