@@ -1,8 +1,5 @@
-$(document).ready(function() {
-  var i;
-  for (i = 1; i <= 7; i++) {
-    $("#wrapper").append("<img class='cloud' id='cloud" + i + "' src='images/cloud" + i + ".png' />");
-  }
+var position_clouds;
+position_clouds = function() {
   return $(".cloud").each(function(i, e) {
     var el;
     el = $(e);
@@ -11,4 +8,7 @@ $(document).ready(function() {
       top: Math.floor(Math.random() * ($(window).height() - 400))
     });
   });
+};
+$(document).ready(function() {
+  return position_clouds();
 });
