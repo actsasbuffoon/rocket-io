@@ -102,17 +102,12 @@ task :pages do
   if g.lib.diff_files.keys.length > 0 || g.status.added.keys.length > 0 || g.status.changed.keys.length > 0 || g.status.deleted.keys.length > 0
     puts "You have uncommitted changes. Aborting."
   else
-    Dir["doc_files/output/**/*"].each do |f|
-      puts "touch #{f}"
-      `touch #{f}`
-    end
-    puts "Stashing changes"
-    `git stash`
+    puts "Copying files outside root"
+    FileUtils.cp_r "doc_files", ".."
     puts "Checking out gh-pages"
     g.checkout "gh-pages"
     Dir["*"].each {|f| puts "deleting #{f}"; FileUtils.rm_rf f}
-    puts "Applying last stash"
-    `git stash pop`
+    FileUtils.mv "../doc_files", "."
     puts "Copying files from doc_files/output"
     FileUtils.mv "doc_files/output/**/*", "."
     puts "Removing doc_files"
