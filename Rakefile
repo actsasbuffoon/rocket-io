@@ -52,6 +52,7 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
+desc "Generate all documentation"
 task :docs do
   puts "Generating documentation"
   # FileUtils.rm_rf "doc_files/output"
@@ -92,4 +93,10 @@ task :docs do
   end
   puts "Copying images"
   FileUtils.cp_r "doc_files/images", "doc_files/output/images"
+end
+
+desc "Move docs to gh-pages branch"
+task :pages do
+  g = Git.new(".")
+  
 end
