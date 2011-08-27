@@ -105,7 +105,7 @@ task :pages do
     Dir["doc_files/output/**/*"].each do |f|
       `touch #{f}`
     end
-    g.stash_save "Prepping GH-PAGES #{Time.now}"
+    g.lib.stash_save "Prepping GH-PAGES #{Time.now}"
     g.checkout "gh-pages"
     Dir["*"].each {|f| FileUtils.rm f}
     `git stash pop`
