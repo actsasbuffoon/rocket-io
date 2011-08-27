@@ -90,6 +90,7 @@ Gem::Specification.new do |s|
     "lib/lib/rocket/monkey_patches.rb",
     "lib/lib/rocket/rocket_user.rb",
     "lib/lib/rocket/runner.rb",
+    "lib/public/html/index.html",
     "lib/public/javascripts/app.js",
     "lib/public/javascripts/formtacular.js",
     "lib/public/javascripts/jade.js",

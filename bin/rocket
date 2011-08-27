@@ -34,7 +34,7 @@ class RocketSetup
     FileUtils.cp(File.join(LIB_DIR, "lib", "rocket.rb"), File.join(CURRENT_DIR, @opts[:n], "lib"))
     FileUtils.cp_r(File.join(LIB_DIR, "public", "javascripts"), File.join(CURRENT_DIR, @opts[:n], "public"))
     File.open(File.join(CURRENT_DIR, @opts[:n], "config", "config.rb"), "w") {|f| f.write "APP_NAME = '#{@opts[:n]}'"}
-    File.open(File.join(CURRENT_DIR, @opts[:n], "public", "index.html"), "w") {|f| f.write File.read(File.join LIB_DIR, "public", "html", "index.html").sub("APP_NAME", @opts[:n])}
+    File.open(File.join(CURRENT_DIR, @opts[:n], "public", "html", "index.html"), "w") {|f| f.write File.read(File.join LIB_DIR, "public", "html", "index.html").sub("APP_NAME", @opts[:n])}
   end
 end
 
