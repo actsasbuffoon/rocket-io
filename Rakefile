@@ -97,6 +97,8 @@ end
 
 desc "Move docs to gh-pages branch"
 task :pages do
-  g = Git.new(".")
+  require 'git'
+  g = Git.open(".")
+  puts g.diff
   
 end

@@ -73,6 +73,7 @@ DEPENDENCIES
   bundler (~> 1.0.0)
   coffee-script
   em-websocket (>= 0.3.1)
+  git
   haml
   jeweler (~> 1.6.4)
   json (>= 1.5.1)
