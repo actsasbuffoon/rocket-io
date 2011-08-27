@@ -34,7 +34,6 @@ class Rocket
     js.eval "window = {}"
     js.load File.join(APP_ROOT, "public", "javascripts", "jade.js")
     js.load File.join(APP_ROOT, "public", "javascripts", "formtacular.js")
-    js.load File.join(APP_ROOT, "public", "javascripts", "rocket_utils.js")
     js.eval "var jade = require('jade')"
     js.eval "templates = {}"
     Dir[File.join(APP_ROOT, "app", "views", "**", "*.jade")].each do |file|

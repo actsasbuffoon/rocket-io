@@ -145,7 +145,7 @@ app/views/example/index.jade
 ----------------------------
 
 ``` jade
-    link_to("O hai, server!", {"Example.say_hello" => {name: "actsasbuffoon"}})
+    != link_to("O hai, server!", {"Example.say_hello": {name: "actsasbuffoon"}})
 ```
 
 This is the template that gets loaded. The only content is a link that will call a server action. Notice that link\_to is quite similar to the link_to helper in Rails. The first argument is the link text, the second is the server action and any arguments you'd like to pass, and there is an optional third parameter for various options like a class to attach to the link.
@@ -178,7 +178,7 @@ app/controllers/example.rb
       bolt Rocket::Controller
       
       define_action :say_hello do
-        current_user.transmit({"Example.be_greeted" => {message: "Howdy, #{params[:name]}!"}})
+        current_user.transmit({"Example.be_greeted" => {message: "Howdy, #{params["name"]}!"}})
       end
       
     end
