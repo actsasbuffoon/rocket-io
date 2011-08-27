@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title></title>
+    <link href='css/main.css' rel='stylesheet' type='text/css' />
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js' type='text/javascript'></script>
+    <script src='js/application.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='topbar'>
+        <a href='http://actsasbuffoon.com/rocket-io'>
+          <img id='logo' src='images/logo.png' />
+        </a>
+        <h1>Rocket.io Documentation</h1>
+      </div>
+      <div id='container'>
+        <div class='row'>
+          <div id='navigation'>
+            <h3>Pages</h3>
+            <ul>
+              <li>
+                <a href='index.html'>index</a>
+              </li>
+              <li>
+                <a href='Introduction.html'>Introduction</a>
+              </li>
+              <li>
+                <a href='ORM_Notes.html'>ORM Notes</a>
+              </li>
+              <li>
+                <a href='Transmission_API.html'>Transmission API</a>
+              </li>
+            </ul>
+            <h3>Ruby Source</h3>
+            <ul>
+              <li>
+                <a href='rocco_rb/lib/lib/rocket/bolt.html'>lib/rocket/bolt.html</a>
+              </li>
+              <li>
+                <a href='rocco_rb/lib/lib/rocket/controller.html'>lib/rocket/controller.html</a>
+              </li>
+              <li>
+                <a href='rocco_rb/lib/lib/rocket/initializer.html'>lib/rocket/initializer.html</a>
+              </li>
+              <li>
+                <a href='rocco_rb/lib/lib/rocket/monkey_patches.html'>lib/rocket/monkey_patches.html</a>
+              </li>
+              <li>
+                <a href='rocco_rb/lib/lib/rocket/rocket_user.html'>lib/rocket/rocket_user.html</a>
+              </li>
+              <li>
+                <a href='rocco_rb/lib/lib/rocket/runner.html'>lib/rocket/runner.html</a>
+              </li>
+              <li>
+                <a href='rocco_rb/lib/lib/rocket.html'>lib/rocket.html</a>
+              </li>
+              <li>
+                <a href='rocco_rb/lib/rocket-io.html'>rocket-io.html</a>
+              </li>
+            </ul>
+            <h3>Javascript Source</h3>
+            <ul>
+              <li>
+                <a href='rocco_js/lib/public/javascripts/formtacular.html'>formtacular.html</a>
+              </li>
+              <li>
+                <a href='rocco_js/lib/public/javascripts/rocket.html'>rocket.html</a>
+              </li>
+              <li>
+                <a href='rocco_js/lib/public/javascripts/rocket_utils.html'>rocket_utils.html</a>
+              </li>
+            </ul>
+          </div>
+          <div id='content'>
+            <h2 id='content_header'>Transmission_API.markdown</h2>
+            <p>One of the most important differences between Rocket and other frameworks is the API for calling remote code from the client or server. Rocket gives you a set of Ruby controllers on the server, and Javascript controllers on the client. Client controllers can call server controllers, and vice versa. Let's look at some examples.</p>
+                
+                <p>Our directory structure looks like this:</p>
+                
+                <ul class='dir_tree'>
+                  <li>
+                    <img src='images/icon_dir.png'/>app
+                    <ul>
+                      <li>
+                        <img src='images/icon_dir.png'/>controllers
+                        <ul>
+                          <li>
+                            <img src='images/icon_ruby.png'/>
+                            example.rb
+                          </li>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            example.js
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>
+                        <img src='images/icon_dir.png'/>
+                        views
+                        <ul>
+                          <li>
+                            <img src='images/icon_other.png'/>
+                            example.jade
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <img src='images/icon_dir.png'/>
+                    public
+                    <ul>
+                      <li>
+                        <img src='images/icon_dir.png'/>
+                        html
+                        <ul>
+                          <li>
+                            <img src='images/icon_other.png'/>
+                            index.html
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <img src='images/icon_dir.png'/>
+                        javascripts
+                        <ul>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            app.js
+                          </li>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            formtacular.js
+                          </li>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            jade.js
+                          </li>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            jquery.js
+                          </li>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            rocket.js
+                          </li>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            rocket_controllers.js
+                          </li>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            rocket_templates.js
+                          </li>
+                          <li>
+                            <img src='images/icon_js.png'/>
+                            rocket_utils.js
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                
+                
+                <h2>public/html/index.html</h2>
+                
+                <div class='code_example'><pre><span class="nt">&lt;html&gt;</span></pre><pre>  <span class="nt">&lt;head&gt;</span></pre><pre>    <span class="nt">&lt;title&gt;</span>Example App<span class="nt">&lt;/title&gt;</span></pre><pre>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;javascripts/jade&#39;</span><span class="nt">/&gt;&lt;/script&gt;</span></pre><pre>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;javascripts/jquery&#39;</span><span class="nt">/&gt;&lt;/script&gt;</span></pre><pre>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;javascripts/formtacular&#39;</span><span class="nt">/&gt;&lt;/script&gt;</span></pre><pre>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;javascripts/rocket_utils&#39;</span><span class="nt">/&gt;&lt;/script&gt;</span></pre><pre>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;javascripts/rocket_controllers.js&#39;</span><span class="nt">/&gt;&lt;/script&gt;</span></pre><pre>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;javascripts/rocket_templates.js&#39;</span><span class="nt">/&gt;&lt;/script&gt;</span></pre><pre>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;javascripts/app.js&#39;</span><span class="nt">/&gt;&lt;/script&gt;</span></pre><pre>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&#39;text/javascript&#39;</span> <span class="na">src=</span><span class="s">&#39;javascripts/rocket.js&#39;</span><span class="nt">/&gt;&lt;/script&gt;</span></pre><pre>  <span class="nt">&lt;body&gt;</span></pre><pre>    </pre><pre>  <span class="nt">&lt;/body&gt;</span></pre><pre><span class="nt">&lt;/html&gt;</span></pre></div>
+                
+                
+                <p>This is actually the default content of this file. We merely show it here so you can see that the static HTML page is only used to bootstrap the framework by loading the necessary Javascript files.</p>
+                
+                <h2>public/javascripts/app.js</h2>
+                
+                <div class='code_example'><pre><span class="c1">// Set up empty callbacks for the user to override.</span></pre><pre><span class="nx">Rocket</span> <span class="o">=</span> <span class="p">{}</span></pre><pre></pre><pre><span class="c1">// Called whenever the user connects (Not just the first time)</span></pre><pre><span class="nx">Rocket</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre><pre>  </pre><pre><span class="p">}</span></pre><pre></pre><pre><span class="c1">// Called when a user connection is terminated</span></pre><pre><span class="nx">Rocket</span><span class="p">.</span><span class="nx">onclose</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre><pre>  </pre><pre><span class="p">}</span></pre><pre></pre><pre><span class="c1">// Called whenever the user receives a message from the server</span></pre><pre><span class="nx">Rocket</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre><pre>  </pre><pre><span class="p">}</span></pre><pre></pre><pre><span class="c1">// Called when the user first connects to the web socket server</span></pre><pre><span class="nx">Rocket</span><span class="p">.</span><span class="nx">first_connect</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre><pre>  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">templates</span><span class="p">.</span><span class="nx">example</span><span class="p">.</span><span class="nx">index</span><span class="p">())</span></pre><pre><span class="p">}</span></pre></div>
+                
+                
+                <p>This file is meant to be modified by the user to get your custom code bootstrapped. In this case, we just need to load a template into the body of the page when the user first connects to the web socket server.</p>
+                
+                <h2>app/views/example/index.jade</h2>
+                
+                <div class='code_example'><pre><span class="nt">link_to</span>(<span class="err">&quot;</span><span class="na">O</span> <span class="na">hai</span><span class="err">,</span> <span class="na">server</span><span class="err">!&quot;,</span> <span class="err">{&quot;</span><span class="na">Example</span><span class="err">.</span><span class="na">say_hello</span><span class="err">&quot;</span> <span class="err">=&gt;</span> <span class="err">{</span><span class="na">name:</span> <span class="err">&quot;</span><span class="na">actsasbuffoon</span><span class="err">&quot;}}</span>)</pre></div>
+                
+                
+                <p>This is the template that gets loaded. The only content is a link that will call a server action. Notice that link_to is quite similar to the link_to helper in Rails. The first argument is the link text, the second is the server action and any arguments you'd like to pass, and there is an optional third parameter for various options like a class to attach to the link.</p>
+                
+                <p>The last argument to link_to is an example of the transmission API. The API is the same on both the client and server, so you don't need to learn two different ways to send data.</p>
+                
+                <p>Let's examine the argument:</p>
+                
+                <div class='code_example'><pre><span class="p">{</span></pre><pre>  <span class="s2">&quot;Example.say_hello&quot;</span><span class="o">:</span> <span class="p">{</span></pre><pre>    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;actsasbuffoon&quot;</span></pre><pre>  <span class="p">}</span></pre><pre><span class="p">}</span></pre></div>
+                
+                
+                <p>As you can see, it is a simple hash (or object, to use the Javascript lingo) with a single key/value pair. The key is the server side controller and action taking the following format: "controller.action".</p>
+                
+                <p>The value is a hash of arguments to pass to the action. They will be made available to the controller as the <em>params</em> hash.</p>
+                
+                <p>To put it all together, the code above will call the <em>say_hello</em> action on the server side <em>ExampleController</em> and pass the following params: {name: "actsasbuffoon"}</p>
+                
+                <p>Pretty simple, right?</p>
+                
+                <h2>app/controllers/example.rb</h2>
+                
+                <div class='code_example'><pre><span class="k">class</span> <span class="nc">ExampleController</span></pre><pre>  <span class="n">bolt</span> <span class="no">Rocket</span><span class="o">::</span><span class="no">Controller</span></pre><pre>  </pre><pre>  <span class="n">define_action</span> <span class="ss">:say_hello</span> <span class="k">do</span></pre><pre>    <span class="n">current_user</span><span class="o">.</span><span class="n">transmit</span><span class="p">({</span><span class="s2">&quot;Example.be_greeted&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="n">message</span><span class="p">:</span> <span class="s2">&quot;Howdy, </span><span class="si">#{</span><span class="n">params</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">}})</span></pre><pre>  <span class="k">end</span></pre><pre>  </pre><pre><span class="k">end</span></pre></div>
+                
+                
+                <p>This is our server side controller. There is one action on the controller called <em>say_hello</em>, which transmits a bit of JSON back to the user.</p>
+                
+                <p><em>params</em> works pretty much just like it does in Rails. It is a combination of the variables explicitly passed as arguments to the action, as well as any form values.</p>
+                
+                <p><em>current_user.transmit</em> is how we send data back to the user. It follows the same transmission rules as the client. This particular code will call the <em>be_greeted</em> action on the client side <em>ExampleController</em>, passing along {message: "Howdy, #{params[:name]}"}.</p>
+                
+                <h2>app/controllers/example.js</h2>
+                
+                <div class='code_example'><pre><span class="nx">ExampleController</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre><pre>  </pre><pre>  <span class="k">this</span><span class="p">.</span><span class="nx">be_greeted</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span></pre><pre>    <span class="nx">alert</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span></pre><pre>  <span class="p">}</span></pre><pre>  </pre><pre><span class="p">}</span></pre></div>
+                
+                
+                <p>This is the client side controller. It has a single action called <em>be_greeted</em> that will create a message box with the contents of the <em>args["message"]</em> variable. Looking at the server side controller in the last section, we can see the message will be "Howdy, #{params[:name]}!".</p>
+                
+                <h2>Summary</h2>
+                
+                <p>So this simple app create a single button that calls the server side <em>ExampleController.say_hello</em> passing along {name: "actsasbuffoon"}. The controller will call the client <em>ExampleController.be_greeted</em> passing along {message: "Howdy, actsasbuffoon!"}. The client action will then create a message box with "Howdy, actsasbuffoon!" inside.</p>
+                
+                <p>This example is obviously very contrived, and more than a little complicated to set up something so simple. However, hopefully this gives you some idea of how to pass information from the client to the server and vice/versa.</p>
+          </div>
+        </div>
+      </div>
+      <img class='cloud' id='cloud1' src='images/cloud1.png' />
+      <img class='cloud' id='cloud2' src='images/cloud2.png' />
+      <img class='cloud' id='cloud3' src='images/cloud3.png' />
+      <img class='cloud' id='cloud4' src='images/cloud4.png' />
+      <img class='cloud' id='cloud5' src='images/cloud5.png' />
+      <img class='cloud' id='cloud6' src='images/cloud6.png' />
+      <img class='cloud' id='cloud7' src='images/cloud7.png' />
+      <div id='push'></div>
+    </div>
+    <div id='footer'>
+      <p>Rocket.io and all associated content are licensed under the MIT license.</p>
+    </div>
+  </body>
+</html>
