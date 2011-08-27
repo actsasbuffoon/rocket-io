@@ -18,6 +18,7 @@ gem "sass"
 gem "rdiscount"
 gem "coffee-script"
 gem "git"
+gem "pygments.rb"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

@@ -96,6 +96,8 @@ namespace :docs do
     puts "Compiling markdown"
     require 'haml'
     require 'rdiscount'
+    require 'pygments'
+    require File.expand_path('utils.rb')
     Haml::Engine.instance_variable_set "@options".to_sym, {format: :html5}
     args = {
       rb_files: Dir["doc_files/output/rocco_rb/**/*.html"],
@@ -105,7 +107,9 @@ namespace :docs do
     Dir["doc_files/pages/*.markdown"].each do |file|
       File.open("doc_files/output/#{file.split("/").last.sub(/\.markdown$/, ".html")}", "w") do |f|
         f.write Haml::Engine.new(File.read "doc_files/layout.haml").render(Object.new, args.merge(current_file: file)) do
-          Markdown.new(File.read file).to_html
+          markdown = File.read file
+          markdown = pygmentize_markdown(markdown)
+          Markdown.new(markdown).to_html
         end
       end
     end
@@ -126,7 +130,7 @@ namespace :docs do
   desc "Copy static files for docs"
   task :copy_static do
     puts "Copying images"
-    FileUtils.cp_r "doc_files/images", "doc_files/output/images"
+    FileUtils.cp_r "doc_files/images", "doc_files/output/"
   end
 
   desc "Move docs to gh-pages branch"

@@ -5,10 +5,10 @@ position_clouds = function() {
     el = $(e);
     return el.offset({
       left: Math.floor(Math.random() * (960 - el.width())),
-      top: Math.floor(Math.random() * ($(window).height() - 400))
+      top: Math.floor(Math.random() * ($(document).height() - el.height() - 200))
     });
   });
 };
-$(document).ready(function() {
+$(window).load(function() {
   return position_clouds();
 });
