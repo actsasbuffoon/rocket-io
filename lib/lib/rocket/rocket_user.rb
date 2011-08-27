@@ -1,15 +1,21 @@
+# This is the class that deals with connected clients. This should probably
+# be renamed to client rather than user.
 class Rocket
   
+  # Stores all connected clients in a hash with their ID as the key.
   @@connected_users = {}
   
+  # Adds a client to the hash.
   def add_local_user(id, user)
     @@connected_users[id.to_s.to_sym] = user
   end
   
+  # Removes a client from the hash.
   def remove_local_user(id)
     @@connected_users.delete id.to_s.to_sym
   end
   
+  # Finds a local user.
   def get_local_user(id)
     @@connected_users[id.to_s.to_sym]
   end
@@ -18,22 +24,28 @@ class Rocket
     
     attr_accessor :server, :id, :web_socket, :web_socket_id
     
+    # Determines whether or not this server is the one managing a given client's connection.
     def local?
       ROCKET.server_id.to_s == @server.to_s
     end
     
+    # Creates a new client taking a hash of attributes. The valid attributes are:
+    # * server
+    # * id
+    # * web_socket
+    # * web_socket_id
     def initialize(args = {})
       args.each_pair do |k, v|
         send "#{k}=", v
       end
     end
     
-    def self.find(id, &blk)
+    # Allows you to call RocketUser.find(client_id)
+    def self.find(id)
       r = ROCKET.redis.hget("rocket_users", id)
       r = JSON.parse(r)
       user = self.new(r.merge id: id, server: r.delete("server_id"), web_socket_id: r.delete("websocket_id"))
       user = Rocket.get_local_user(user.web_socket_id) if user.local?
-      blk.call(user)
     end
     
     def self.create(socket)

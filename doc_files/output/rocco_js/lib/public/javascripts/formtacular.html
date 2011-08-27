@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>formtacular.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="formtacular.html">formtacular.js</a>
+          <a class="source" href="rocket.html">rocket.js</a>
+          <a class="source" href="rocket_utils.html">rocket_utils.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>formtacular.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p>This file deals with shortcuts and helpers for forms and other view related
+things.</p>
+
+<p>Most of these methods deal with generating form inputs. For those methods, they
+create a label that is linked to the input and wrap everything in an element
+(usually a div, but can be overridden).</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>Create a text input.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">text_input</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">vl</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">vl</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span><span class="nx">vl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+  <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+  <span class="nx">label_text</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+  <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/label&gt;&lt;input type=&#39;text&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; value=&#39;&quot;</span><span class="o">+</span><span class="nx">vl</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;&lt;/div&gt;&quot;</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Create a hidden input</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">hidden_input</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">vl</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">vl</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span><span class="nx">vl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+  <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+  <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;input type=&#39;hidden&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; value=&#39;&quot;</span><span class="o">+</span><span class="nx">vl</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;&quot;</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Create a textarea</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">textarea_input</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">vl</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">vl</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span><span class="nx">vl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+  <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+  <span class="nx">label_text</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+  <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/label&gt;&lt;textarea name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; &gt;&quot;</span><span class="o">+</span><span class="nx">vl</span><span class="o">+</span><span class="s2">&quot;&lt;/textarea&gt;&lt;/div&gt;&quot;</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Create a file_input that doesn&rsquo;t make use of Rocket&rsquo;s upload functionality.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">file_input</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">vl</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">vl</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span><span class="nx">vl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+  <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+  <span class="nx">label_text</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+  <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/label&gt;&lt;input type=&#39;file&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; &gt;&quot;</span><span class="o">+</span><span class="nx">vl</span><span class="o">+</span><span class="s2">&quot;&lt;/input&gt;&lt;/div&gt;&quot;</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Creates a file that makes use of Rocket&rsquo;s &ldquo;Simple Upload&rdquo;. Simple Upload reads the
+contents of a file via the javascript file API, base64 encodes it, and passes the
+data to the server side controller action as part of the form.</p>
+
+<p>Simple Upload doesn&rsquo;t require any configuration, but has some drawbacks. For one,
+it doesn&rsquo;t deal well with large amounts of data. Second, the read happens in one pass,
+so there is no opportunity to present the user with a progress bar.</p>
+
+<p>Simple Upload is probably inadvisable except for very small files.</p>
+
+<p>Note that this function does a little more than the simpler form helpers. It puts a
+few extra elements in that make it possible for the upload script to work. If you do
+not wish to use Formtacular in your project, be sure to include the extra elements
+with your file input, or the uploads will not work.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">simple_upload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+  <span class="nx">label_text</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+  <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/label&gt;&lt;span class=&#39;rocket_file_upload&#39;&gt;&lt;input type=&#39;hidden&#39; class=&#39;upload_type&#39; value=&#39;simple&#39; /&gt;&lt;input type=&#39;hidden&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; class=&#39;rocket_real_file_input&#39; /&gt;&lt;input type=&#39;file&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;_dummy&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;_dummy&#39; /&gt;&lt;/span&gt;&lt;/div&gt;&quot;</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>Creates a file input that uses the &ldquo;Form First&rdquo; uploader. Form First does exactly what
+it sounds like; it uploads the file first, and submits the form after. Note that you
+need to set up some special controller actions for this to work. Look at the server
+framework under Rocket::Controller for more information.</p>
+
+<p>Like Simple Upload, this function includes extra elements needed to make the upload work.
+Be sure to include the extra elements with your file input.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">file_first_upload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">vl</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">vl</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span><span class="nx">vl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+  <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+  <span class="nx">label_text</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+  <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/label&gt;&lt;span class=&#39;rocket_file_upload &quot;</span><span class="o">+</span><span class="nx">args</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&lt;input type=&#39;hidden&#39; class=&#39;upload_type&#39; value=&#39;file_first&#39; /&gt;&lt;input type=&#39;hidden&#39; class=&#39;upload_action&#39; value=&#39;&quot;</span><span class="o">+</span><span class="nx">args</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;&lt;input type=&#39;hidden&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; class=&#39;rocket_real_file_input&#39; /&gt;&lt;input type=&#39;file&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;&lt;/span&gt;&lt;/div&gt;&quot;</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Does not serve a purpose yet.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">form_first_upload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">vl</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">vl</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span><span class="nx">vl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+  <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+  <span class="nx">label_text</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+  <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/label&gt;&lt;span class=&#39;rocket_file_upload &quot;</span><span class="o">+</span> <span class="nx">args</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">+</span><span class="s2">&quot;&#39;&gt;&lt;input type=&#39;hidden&#39; class=&#39;upload_type&#39; value=&#39;form_first&#39; /&gt;&lt;input type=&#39;hidden&#39; class=&#39;upload_action&#39; value=&#39;&quot;</span><span class="o">+</span><span class="nx">args</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;&lt;input type=&#39;file&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;&lt;/span&gt;&lt;/div&gt;&quot;</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

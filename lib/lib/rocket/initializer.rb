@@ -1,6 +1,9 @@
 require 'coffee-script'
 
+# This is where everything related to compiling your Javascript into files
+# for the user happens.
 class Rocket
+  # .to_json doesn't normally output functions, so this is a hack to take care of that.
   def recursive_object_dump(obj, prev = "")
     code = []
     if prev != ""
@@ -18,6 +21,13 @@ class Rocket
     code.join("\n")
   end
   
+  # This takes care of compiling the templates in app/views. This is recursive, so if you
+  # have app/views/admin/song/index.jade, it will be made available to the client as
+  # templates.admin.song.index
+  #
+  # The views are compiled down to a Javascript function that takes a hash of arguments and
+  # returns rendered HTML. We only support [Jade](http://jade-lang.com) at the moment, but other templating languages
+  # should be supported in the future.
   def compile_templates
     puts "Compiling Templates"
     js = V8::Context.new
@@ -48,7 +58,9 @@ class Rocket
     File.open(File.join(APP_ROOT, "public", "javascripts", "rocket_templates.js"), "w") {|f| f.write recursive_object_dump(js["templates"], "templates")}
     puts "Finished compiling templates."
   end
-
+  
+  # This method takes the controllers defined in app/controllers and sticks them onto a
+  # variable named "controllers" for the client.
   def compile_controllers
     puts "Compiling Controllers"
     js = V8::Context.new
@@ -69,16 +81,11 @@ EOS
     File.open(File.join(APP_ROOT, "public", "javascripts", "rocket_controllers.js"), "w") {|f| f.write recursive_object_dump(js["controllers"], "controllers")}
     puts "Finished Compiling Controllers"
   end
-
+  
+  # Just calls the other two methods.
   def prepare_js
     compile_templates
     compile_controllers
   end
   
-  def initialize
-    Dir[File.join(APP_ROOT, "app", "controllers", "*.rb")].each do |f|
-      puts File.expand_path f
-      require File.expand_path(f)
-    end
-  end
 end

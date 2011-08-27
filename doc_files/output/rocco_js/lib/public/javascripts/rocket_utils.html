@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>rocket_utils.js</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="formtacular.html">formtacular.js</a>
+          <a class="source" href="rocket.html">rocket.js</a>
+          <a class="source" href="rocket_utils.html">rocket_utils.js</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>rocket_utils.js</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p>This file provides utility classes for Rocket.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>Set up empty callbacks for the user to override.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nx">Rocket</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="nx">Rocket</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span>
+<span class="nx">Rocket</span><span class="p">.</span><span class="nx">onclose</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span>
+<span class="nx">Rocket</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span>
+<span class="nx">Rocket</span><span class="p">.</span><span class="nx">first_connect</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Determine if we need to use a vendor specific slice method for chunking files.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">Blob</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">Blob</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">file_api_slice_method</span> <span class="o">=</span> <span class="s2">&quot;slice&quot;</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">Blob</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">webkitSlice</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">file_api_slice_method</span> <span class="o">=</span> <span class="s2">&quot;webkitSlice&quot;</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">Blob</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">mozSlice</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">file_api_slice_method</span> <span class="o">=</span> <span class="s2">&quot;mozSlice&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Create a link that uses the Rocket API. This looks a lot like the link<em>to helper
+in Rails. Writing something like &ldquo;link</em>to(&lsquo;Show&rsquo;, {&lsquo;User.show&rsquo;: {id: 1}})&rdquo; would
+create a link that when clicked will call the &ldquo;User.show&rdquo; server side action and
+pass the nested object as an argument. Note that you can override the tag type,
+and even what the onclick callback should be.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">link_to</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">attrs</span> <span class="o">=</span> <span class="nx">attrs</span> <span class="o">||</span> <span class="p">{}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">tag_type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">tag_type</span> <span class="o">=</span> <span class="nx">attrs</span><span class="p">.</span><span class="nx">tag_type</span>
+    <span class="k">delete</span><span class="p">(</span><span class="nx">attrs</span><span class="p">.</span><span class="nx">tag_type</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">tag_type</span> <span class="o">=</span> <span class="s2">&quot;a&quot;</span>
+  <span class="p">}</span>
+  <span class="nx">attrs</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">attrs</span><span class="p">.</span><span class="nx">href</span> <span class="o">||</span> <span class="s2">&quot;#&quot;</span>
+  <span class="nx">attrs</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">||</span> <span class="s2">&quot;rocket(&quot;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+  <span class="nx">t</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span> <span class="k">in</span> <span class="nx">attrs</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">t</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">k</span> <span class="o">+</span> <span class="s2">&quot;=&#39;&quot;</span> <span class="o">+</span> <span class="nx">attrs</span><span class="p">[</span><span class="nx">k</span><span class="p">].</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;\\&#39;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">tag_type</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">t</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">tag_type</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
+  <span class="k">return</span> <span class="nx">str</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Utility function to reduce a byte count to something easier to read. Useful
+for file uploads.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">size_estimator</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bytes</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">n</span> <span class="o">=</span> <span class="kc">false</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">bytes</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">n</span> <span class="o">=</span> <span class="p">[</span><span class="nx">bytes</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">bytes</span> <span class="o">&lt;</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">n</span> <span class="o">=</span> <span class="p">[</span><span class="nx">bytes</span> <span class="o">/</span> <span class="mf">1024.0</span><span class="p">,</span> <span class="s2">&quot;KB&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">bytes</span> <span class="o">&lt;</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">n</span> <span class="o">=</span> <span class="p">[</span><span class="nx">bytes</span> <span class="o">/</span> <span class="mf">1024.0</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">&quot;MB&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">bytes</span> <span class="o">&lt;</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">n</span> <span class="o">=</span> <span class="p">[</span><span class="nx">bytes</span> <span class="o">/</span> <span class="mf">1024.0</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">&quot;GB&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">bytes</span> <span class="o">&lt;</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">n</span> <span class="o">=</span> <span class="p">[</span><span class="nx">bytes</span> <span class="o">/</span> <span class="mf">1024.0</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">&quot;TB&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">n</span> <span class="o">=</span> <span class="p">[</span><span class="nx">bytes</span> <span class="o">/</span> <span class="mf">1024.0</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">&quot;PB&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="nx">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Store all current file uploads</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">file_uploads</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="kd">var</span> <span class="nx">RocketUploader</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
+  
+  <span class="kd">var</span> <span class="nx">RocketFileFirstUpload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">uploader</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">real_input</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">file_chunk_size</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">uploader</span> <span class="o">=</span> <span class="nx">uploader</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">file</span> <span class="o">=</span> <span class="nx">file</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">action</span> <span class="o">=</span> <span class="nx">action</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">real_input</span> <span class="o">=</span> <span class="nx">real_input</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">uploader</span><span class="p">.</span><span class="nx">form</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">set_temp_id</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t_id</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">temp_id</span> <span class="o">=</span> <span class="nx">t_id</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">upload_chunk</span><span class="p">()</span>
+    <span class="p">}</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">file_first</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">start</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">req_id</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span>
+      <span class="nx">file_uploads</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">req_id</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">wait_for</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">req_id</span><span class="p">)</span>
+      <span class="nx">v</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="nx">v</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">action</span> <span class="o">+</span> <span class="s2">&quot;_request_tempfile&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nx">req_id</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">req_id</span><span class="p">}</span>
+      <span class="nx">rocket</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">uploader</span><span class="p">.</span><span class="nx">elem</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;data-rocket-upload&quot;</span><span class="p">,</span> <span class="s2">&quot;file_uploads[&quot;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">req_id</span><span class="o">+</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+      
+      <span class="k">this</span><span class="p">.</span><span class="nx">oncomplete</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">real_input</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">temp_id</span><span class="p">)</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">finished_with</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">req_id</span><span class="p">)</span>
+      <span class="p">}</span>
+      
+      <span class="k">this</span><span class="p">.</span><span class="nx">upload_chunk</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">start</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">r</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">()</span>
+        <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span> <span class="o">=</span> <span class="k">this</span>
+        
+        <span class="nx">r</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
+          <span class="nx">t</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getMilliseconds</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span>
+          <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">time</span><span class="o">:</span> <span class="nx">t</span><span class="p">,</span> <span class="nx">size</span><span class="o">:</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">file_chunk_size</span><span class="p">})</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">uploader</span><span class="p">.</span><span class="nx">elem</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;uploaded_chunk&quot;</span><span class="p">)</span>
+          
+          <span class="k">if</span> <span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">file_chunk_size</span> <span class="o">&lt;</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">fileSize</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">v</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="nx">v</span><span class="p">[</span><span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">action</span> <span class="o">+</span> <span class="s2">&quot;_receive_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nx">chunk</span><span class="o">:</span> <span class="nx">btoa</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span><span class="p">),</span> <span class="nx">complete</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">file_chunk_size</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">temp_id</span><span class="p">,</span> <span class="nx">req_id</span><span class="o">:</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">req_id</span><span class="p">}</span>
+            <span class="nx">rocket</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+            <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">upload_chunk</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">file_chunk_size</span><span class="p">)</span>
+          <span class="p">}</span>
+          <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">v</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="nx">v</span><span class="p">[</span><span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">action</span> <span class="o">+</span> <span class="s2">&quot;_receive_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nx">chunk</span><span class="o">:</span> <span class="nx">btoa</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span><span class="p">),</span> <span class="nx">complete</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">index</span><span class="o">:</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">file_chunk_size</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">temp_id</span><span class="p">,</span> <span class="nx">req_id</span><span class="o">:</span> <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">req_id</span><span class="p">}</span>
+            <span class="nx">rocket</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">r</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+        <span class="p">}</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="nx">start</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="nx">start</span>
+        <span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>Is this the last chunk of the file or not?</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">file_chunk_size</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">fileSize</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">f</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">file</span><span class="p">[</span><span class="nx">file_api_slice_method</span><span class="p">](</span><span class="k">this</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">start</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">file_chunk_size</span><span class="p">)</span>
+          <span class="nx">r</span><span class="p">.</span><span class="nx">readAsBinaryString</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">f</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">file</span><span class="p">[</span><span class="nx">file_api_slice_method</span><span class="p">](</span><span class="k">this</span><span class="p">.</span><span class="nx">start</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">fileSize</span><span class="p">)</span>
+          <span class="nx">r</span><span class="p">.</span><span class="nx">readAsBinaryString</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">file_first</span><span class="p">()</span>
+  <span class="p">}</span>
+  
+  <span class="kd">var</span> <span class="nx">RocketSimpleUpload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">uploader</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">real_input</span><span class="p">)</span> <span class="p">{</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">simple_read</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">wait_for</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+      <span class="nx">r</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">()</span>
+      <span class="nx">r</span><span class="p">.</span><span class="nx">rocket_upload</span> <span class="o">=</span> <span class="k">this</span>
+      <span class="nx">r</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">real_input</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">btoa</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span><span class="p">))</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">finished_with</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rocket_upload</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="nx">r</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="nx">r</span><span class="p">.</span><span class="nx">readAsBinaryString</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">file</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">uploader</span> <span class="o">=</span> <span class="nx">uploader</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">form</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">uploader</span><span class="p">.</span><span class="nx">form</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">file</span> <span class="o">=</span> <span class="nx">file</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">real_input</span> <span class="o">=</span> <span class="nx">real_input</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">simple_read</span><span class="p">()</span>
+  <span class="p">}</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">form</span> <span class="o">=</span> <span class="nx">form</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">elem</span> <span class="o">=</span> <span class="nx">elem</span>
+  <span class="nx">type</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">elem</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.upload_type&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+  <span class="nx">action</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">elem</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.upload_action&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+  <span class="nx">real_input</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">elem</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.rocket_real_file_input&quot;</span><span class="p">)</span>
+  <span class="nx">file_input</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">elem</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;input[type=&#39;file&#39;]&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">file_input</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;simple&quot;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">new</span> <span class="nx">RocketSimpleUpload</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">file_input</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">real_input</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;file_first&quot;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">new</span> <span class="nx">RocketFileFirstUpload</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">file_input</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">real_input</span><span class="p">,</span> <span class="nx">action</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Override the submission of forms to use the submit_callback function.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;input[type=submit]&quot;</span><span class="p">).</span><span class="nx">live</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span> <span class="p">{</span><span class="nx">submit_callback</span><span class="p">(</span><span class="nx">evnt</span><span class="p">)})</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>Prevent the form from being submitted and create a new RocketForm form the HTML form.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nx">submit_callback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">evnt</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+  <span class="k">new</span> <span class="nx">RocketForm</span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>Takes an HTML form and allows it to be uploaded. Purposes include:
+* Dealing with file uploads
+* Deferring the upload based on callbacks (could be useful for uploads or validation)
+* Paramifying form data</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">RocketForm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evnt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">waiting</span> <span class="o">=</span> <span class="p">[]</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">wait_for</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Waiting for &quot;</span> <span class="o">+</span> <span class="nx">key</span><span class="p">)</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">waiting</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+  <span class="p">}</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">finished_with</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">ret</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;No longer waiting for &quot;</span> <span class="o">+</span> <span class="nx">key</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">waiting</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">waiting</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">waiting</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">waiting</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">check_submission</span><span class="p">(</span><span class="nx">ret</span><span class="p">)</span>
+  <span class="p">}</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">check_submission</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Checking submission&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">args</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Received args:&quot;</span><span class="p">)</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">waiting</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Ready!&quot;</span><span class="p">)</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">submit</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Not ready.&quot;</span><span class="p">)</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">waiting</span><span class="p">)</span>
+      <span class="k">return</span> <span class="kc">false</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Called submit!&quot;</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nx">frm</span> <span class="o">=</span> <span class="k">this</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">frm</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;input, textarea, select&quot;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">el</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;file&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Found a file uploader&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.upload_type&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;simple&quot;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">frm</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="nx">el</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.rocket_real_file_input&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.rocket_real_file_input&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.upload_type&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;file_first&quot;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">frm</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="nx">el</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.rocket_real_file_input&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;.rocket_real_file_input&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;rocket_file_upload&quot;</span><span class="p">))</span> <span class="p">{</span>
+        
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">val</span><span class="p">())</span> <span class="p">{</span>
+          <span class="nx">frm</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">val</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;submit&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">frm</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="s2">&quot;submit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">null</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">vals</span><span class="p">)</span>
+    <span class="nx">obj</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nx">obj</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">frm</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">vals</span>
+    <span class="nx">rocket</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+  <span class="p">}</span>
+  
+  <span class="k">this</span><span class="p">.</span><span class="nx">elem</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">evnt</span><span class="p">.</span><span class="nx">target</span><span class="p">)</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">frm</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">elem</span><span class="p">.</span><span class="nx">parents</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">))</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">vals</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="s2">&quot;_method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">frm</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">)</span> <span class="o">||</span> <span class="s2">&quot;POST&quot;</span>
+  <span class="kd">var</span> <span class="nx">ul</span> <span class="o">=</span> <span class="k">this</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">frm</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;input, textarea, select&quot;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">el</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;file&quot;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Found a file uploader&quot;</span><span class="p">)</span>
+      <span class="k">new</span> <span class="nx">RocketUploader</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">parent</span><span class="p">(),</span> <span class="nx">ul</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">check_submission</span><span class="p">()</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

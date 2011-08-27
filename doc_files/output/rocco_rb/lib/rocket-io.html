@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>rocket-io.rb</title>
+  <link rel="stylesheet" href="http://jashkenas.github.com/docco/resources/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="lib/rocket.html">rocket.rb</a>
+          <a class="source" href="lib/rocket/bolt.html">bolt.rb</a>
+          <a class="source" href="lib/rocket/controller.html">controller.rb</a>
+          <a class="source" href="lib/rocket/initializer.html">initializer.rb</a>
+          <a class="source" href="lib/rocket/monkey_patches.html">monkey_patches.rb</a>
+          <a class="source" href="lib/rocket/rocket_user.html">rocket_user.rb</a>
+          <a class="source" href="lib/rocket/runner.html">runner.rb</a>
+          <a class="source" href="rocket-io.html">rocket-io.rb</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>rocket-io.rb</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;base64&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;fileutils&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;em-redis&#39;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>require &lsquo;mongoid&rsquo;
+require &lsquo;em-synchrony&rsquo;
+require &lsquo;em-synchrony/em-redis&rsquo;
+require &lsquo;em-synchrony/mongoid&rsquo;</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;vendor&quot;</span><span class="p">,</span> <span class="s2">&quot;em-synchrony&quot;</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;em-synchrony.rb&quot;</span><span class="p">)</span>
+<span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;vendor&quot;</span><span class="p">,</span> <span class="s2">&quot;em-synchrony&quot;</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;em-synchrony&quot;</span><span class="p">,</span> <span class="s2">&quot;em-redis.rb&quot;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>require File.expand_path(File.join &ldquo;vendor&rdquo;, &ldquo;em-synchrony&rdquo;, &ldquo;lib&rdquo;, &ldquo;em-synchrony&rdquo;, &ldquo;mongo.rb&rdquo;)</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="nb">require</span> <span class="s1">&#39;thin&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;sinatra/async&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;em-websocket&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;json&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;v8&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;nokogiri&#39;</span>
+
+<span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket&quot;</span><span class="p">,</span> <span class="s1">&#39;monkey_patches.rb&#39;</span><span class="p">)</span>
+<span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket&quot;</span><span class="p">,</span> <span class="s1">&#39;bolt.rb&#39;</span><span class="p">)</span>
+<span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket&quot;</span><span class="p">,</span> <span class="s1">&#39;initializer.rb&#39;</span><span class="p">)</span>
+<span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket&quot;</span><span class="p">,</span> <span class="s1">&#39;rocket_user.rb&#39;</span><span class="p">)</span>
+<span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket&quot;</span><span class="p">,</span> <span class="s1">&#39;controller.rb&#39;</span><span class="p">)</span>
+<span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;lib&quot;</span><span class="p">,</span> <span class="s2">&quot;rocket&quot;</span><span class="p">,</span> <span class="s1">&#39;runner.rb&#39;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

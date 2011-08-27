@@ -51,3 +51,45 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+task :docs do
+  puts "Generating documentation"
+  # FileUtils.rm_rf "doc_files/output"
+  # FileUtils.mkdir_p "doc_files/output"
+  puts "Creating Ruby Rocco documentation"
+  # `rocco -l ruby -c \\# -o doc_files/output/rocco_rb lib/*.rb lib/lib/*.rb lib/lib/**/*.rb`
+  puts "Creating Javascript Rocco documentation"
+  # `rocco -l javascript -c // -o doc_files/output/rocco_js lib/public/javascripts/rocket.js lib/public/javascripts/rocket_utils.js lib/public/javascripts/formtacular.js`
+  puts "Compiling SASS"
+  require 'sass'
+  FileUtils.mkdir_p "doc_files/output/css"
+  Dir["doc_files/sass/*.sass"].each do |file|
+   File.open("doc_files/output/css/#{file.split("/").last.sub(/\.sass$/, ".css")}", "w") {|f| f.write Sass::Engine.new(File.read file).render}
+  end
+  puts "Compiling markdown"
+  require 'haml'
+  require 'rdiscount'
+  Haml::Engine.instance_variable_set "@options".to_sym, {format: :html5}
+  args = {
+    rb_files: Dir["doc_files/output/rocco_rb/**/*.html"],
+    js_files: Dir["doc_files/output/rocco_js/**/*.html"],
+    pages: Dir["doc_files/pages/**/*.markdown"]
+  }
+  Dir["doc_files/pages/*.markdown"].each do |file|
+    File.open("doc_files/output/#{file.split("/").last.sub(/\.markdown$/, ".html")}", "w") do |f|
+      f.write Haml::Engine.new(File.read "doc_files/layout.haml").render(Object.new, args.merge(current_file: file)) do
+        Markdown.new(File.read file).to_html
+      end
+    end
+  end
+  puts "Compiling CoffeeScript"
+  require 'coffee-script'
+  FileUtils.mkdir_p "doc_files/output/js"
+  Dir["doc_files/coffee/*.coffee"].each do |file|
+    File.open("doc_files/output/js/#{file.split("/").last.sub(/\.coffee$/, ".js")}", "w") do |f|
+      f.write CoffeeScript.compile(File.read(file), bare: true)
+    end
+  end
+  puts "Copying images"
+  FileUtils.cp_r "doc_files/images", "doc_files/output/images"
+end

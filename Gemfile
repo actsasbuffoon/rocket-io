@@ -11,6 +11,12 @@ gem 'json', ">= 1.5.1"
 gem 'therubyracer', ">= 0.9.3"
 gem 'nokogiri', ">= 1.4.4"
 gem "slop"
+gem "rocco"
+gem "pygmentize"
+gem "haml"
+gem "sass"
+gem "rdiscount"
+gem "coffee-script"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
