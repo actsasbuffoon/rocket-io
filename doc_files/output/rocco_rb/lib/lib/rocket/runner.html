@@ -243,6 +243,22 @@ will throw an error.</p>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-13">&#182;</a>
         </div>
+        <p>This pulls in all of the models defined in app/models. Currently it only
+pulls files in the model directory, but we should probably make it nested
+at some point. People might want that for namespacing.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>      <span class="no">Dir</span><span class="o">[</span><span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="s2">&quot;models&quot;</span><span class="p">,</span> <span class="s2">&quot;*.rb&quot;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+        <span class="nb">require</span> <span class="n">file</span>
+      <span class="k">end</span>
+      </pre></div>
+      </td>
+    </tr>
+    <tr id='section-14'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-14">&#182;</a>
+        </div>
         <p>Create two Redis connections; one for dealing with clients, and another for
 handling the processing queue.</p>
       </td>
@@ -252,10 +268,10 @@ handling the processing queue.</p>
       </pre></div>
       </td>
     </tr>
-    <tr id='section-14'>
+    <tr id='section-15'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-14">&#182;</a>
+          <a class="pilcrow" href="#section-15">&#182;</a>
         </div>
         <p>The server gets a unique ID from Redis so other servers can identify it. This
 becomes useful when trying to communicate with a client connected to another
@@ -266,10 +282,10 @@ server.</p>
       </pre></div>
       </td>
     </tr>
-    <tr id='section-15'>
+    <tr id='section-16'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-15">&#182;</a>
+          <a class="pilcrow" href="#section-16">&#182;</a>
         </div>
         <p>Start the message processing queue.</p>
       </td>
@@ -278,10 +294,10 @@ server.</p>
       </pre></div>
       </td>
     </tr>
-    <tr id='section-16'>
+    <tr id='section-17'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-16">&#182;</a>
+          <a class="pilcrow" href="#section-17">&#182;</a>
         </div>
         <p>Start the web socket listener.</p>
       </td>
@@ -290,10 +306,10 @@ server.</p>
         </pre></div>
       </td>
     </tr>
-    <tr id='section-17'>
+    <tr id='section-18'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-17">&#182;</a>
+          <a class="pilcrow" href="#section-18">&#182;</a>
         </div>
         <p>Create a new client. Perhaps we should provide a callback here.</p>
       </td>
@@ -304,10 +320,10 @@ server.</p>
         </pre></div>
       </td>
     </tr>
-    <tr id='section-18'>
+    <tr id='section-19'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-18">&#182;</a>
+          <a class="pilcrow" href="#section-19">&#182;</a>
         </div>
         <p>We don&rsquo;t do anything here yet, but we should probably provide a callback and
 clean the disconnected user out of the database.</p>
@@ -319,10 +335,10 @@ clean the disconnected user out of the database.</p>
         </pre></div>
       </td>
     </tr>
-    <tr id='section-19'>
+    <tr id='section-20'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-19">&#182;</a>
+          <a class="pilcrow" href="#section-20">&#182;</a>
         </div>
         <p>Deals with incoming messages. We should probably provide a callback.</p>
       </td>
@@ -330,10 +346,10 @@ clean the disconnected user out of the database.</p>
         <div class='highlight'><pre>        <span class="n">ws</span><span class="o">.</span><span class="n">onmessage</span> <span class="k">do</span> <span class="o">|</span><span class="n">json_msg</span><span class="o">|</span></pre></div>
       </td>
     </tr>
-    <tr id='section-20'>
+    <tr id='section-21'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-20">&#182;</a>
+          <a class="pilcrow" href="#section-21">&#182;</a>
         </div>
         <p>Wrapped in a fiber for Synchrony.</p>
       </td>
@@ -341,10 +357,10 @@ clean the disconnected user out of the database.</p>
         <div class='highlight'><pre>          <span class="no">Fiber</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span></pre></div>
       </td>
     </tr>
-    <tr id='section-21'>
+    <tr id='section-22'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-21">&#182;</a>
+          <a class="pilcrow" href="#section-22">&#182;</a>
         </div>
         <p>In a begin block to keep going if there&rsquo;s an error in a controller action.</p>
       </td>
@@ -352,10 +368,10 @@ clean the disconnected user out of the database.</p>
         <div class='highlight'><pre>            <span class="k">begin</span></pre></div>
       </td>
     </tr>
-    <tr id='section-22'>
+    <tr id='section-23'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-22">&#182;</a>
+          <a class="pilcrow" href="#section-23">&#182;</a>
         </div>
         <p>Grab the user and deal with their input.</p>
       </td>
@@ -374,10 +390,10 @@ clean the disconnected user out of the database.</p>
       </pre></div>
       </td>
     </tr>
-    <tr id='section-23'>
+    <tr id='section-24'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-23">&#182;</a>
+          <a class="pilcrow" href="#section-24">&#182;</a>
         </div>
         <p>Run Async Sinatra.</p>
 

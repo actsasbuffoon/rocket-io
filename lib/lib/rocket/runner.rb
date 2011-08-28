@@ -97,6 +97,13 @@ class Rocket
         require file
       end
       
+      # This pulls in all of the models defined in app/models. Currently it only
+      # pulls files in the model directory, but we should probably make it nested
+      # at some point. People might want that for namespacing.
+      Dir[File.join APP_ROOT, "app", "models", "*.rb"].each do |file|
+        require file
+      end
+      
       # Create two Redis connections; one for dealing with clients, and another for
       # handling the processing queue.
       @redis = EM::Protocols::Redis.connect

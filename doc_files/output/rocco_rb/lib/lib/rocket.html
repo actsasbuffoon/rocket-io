@@ -42,30 +42,15 @@ of your Rocket project.</p>
       <td class=code>
         <div class='highlight'><pre><span class="no">APP_ROOT</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="o">*</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">expand_path</span> <span class="bp">__FILE__</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="nb">require</span> <span class="s2">&quot;rocket-io&quot;</span></pre></div>
+<span class="nb">require</span> <span class="s2">&quot;rocket-io&quot;</span>
+
+<span class="no">ROCKET</span> <span class="o">=</span> <span class="no">Rocket</span><span class="o">.</span><span class="n">new</span></pre></div>
       </td>
     </tr>
     <tr id='section-2'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-2">&#182;</a>
-        </div>
-        <p>This pulls in all of the models defined in app/models. Currently it only
-pulls files in the model directory, but we should probably make it nested
-at some point. People might want that for namespacing.</p>
-      </td>
-      <td class=code>
-        <div class='highlight'><pre><span class="no">Dir</span><span class="o">[</span><span class="no">File</span><span class="o">.</span><span class="n">join</span> <span class="no">APP_ROOT</span><span class="p">,</span> <span class="s2">&quot;app&quot;</span><span class="p">,</span> <span class="s2">&quot;models&quot;</span><span class="p">,</span> <span class="s2">&quot;*.rb&quot;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
-  <span class="nb">require</span> <span class="n">file</span>
-<span class="k">end</span>
-
-<span class="no">ROCKET</span> <span class="o">=</span> <span class="no">Rocket</span><span class="o">.</span><span class="n">new</span></pre></div>
-      </td>
-    </tr>
-    <tr id='section-3'>
-      <td class=docs>
-        <div class="pilwrap">
-          <a class="pilcrow" href="#section-3">&#182;</a>
         </div>
         <p>This compiles all of you JS and CoffeeScript files and dumps them in the
 public directory.</p>
@@ -74,10 +59,10 @@ public directory.</p>
         <div class='highlight'><pre><span class="no">ROCKET</span><span class="o">.</span><span class="n">prepare_js</span></pre></div>
       </td>
     </tr>
-    <tr id='section-4'>
+    <tr id='section-3'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
+          <a class="pilcrow" href="#section-3">&#182;</a>
         </div>
         <p>Start the main loop.</p>
 
