@@ -1,6 +1,6 @@
 = rocket-io
 
-Description goes here.
+Rocket is a realtime web application framework built with Ruby. Check out {the official site}[http://actsasbuffoon.com/rocket-io] for screencasts, tutorials, annotated source code, and more.
 
 == Contributing to rocket-io
  
