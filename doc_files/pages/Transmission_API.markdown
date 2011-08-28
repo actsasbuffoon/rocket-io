@@ -1,3 +1,5 @@
+<iframe src="http://player.vimeo.com/video/28253138?title=0&amp;byline=0&amp;portrait=0&amp;color=fbca54" width="580" height="435" frameborder="0"></iframe>
+
 One of the most important differences between Rocket and other frameworks is the API for calling remote code from the client or server. Rocket gives you a set of Ruby controllers on the server, and Javascript controllers on the client. Client controllers can call server controllers, and vice versa. Let's look at some examples.
 
 Our directory structure looks like this:
