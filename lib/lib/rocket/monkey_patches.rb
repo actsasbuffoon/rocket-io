@@ -1,6 +1,11 @@
 # This file contains a series of monkey patches to make it work with other libs
 # or that are merely convenient.
 
+# Mongoid initializer bombs without this.
+def silence_warnings
+  yield
+end
+
 class String
   
   # Takes a string in the form of "my_awesome_class" and returns "MyAwesomeClass".

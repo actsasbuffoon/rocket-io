@@ -52,11 +52,13 @@ create a label that is linked to the input and wrap everything in an element
       <td class=code>
         <div class='highlight'><pre><span class="kd">var</span> <span class="nx">text_input</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">vl</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">vl</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span><span class="nx">vl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+  <span class="nx">vl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="nx">vl</span>
+  <span class="nx">vl</span> <span class="o">=</span> <span class="nx">vl</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&quot;/g</span><span class="p">,</span> <span class="s1">&#39;\&quot;&#39;</span><span class="p">)</span>
   <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
   <span class="nx">label_text</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
   <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
   <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
-  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/label&gt;&lt;input type=&#39;text&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; value=&#39;&quot;</span><span class="o">+</span><span class="nx">vl</span><span class="o">+</span><span class="s2">&quot;&#39; /&gt;&lt;/div&gt;&quot;</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s1">&#39;&lt;/label&gt;&lt;input type=&quot;text&quot; name=&quot;&#39;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39;&quot; id=&quot;&#39;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s1">&#39;&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">vl</span><span class="o">+</span><span class="s1">&#39;&quot; /&gt;&lt;/div&gt;&#39;</span>
 <span class="p">}</span></pre></div>
       </td>
     </tr>
@@ -100,6 +102,30 @@ create a label that is linked to the input and wrap everything in an element
         <div class="pilwrap">
           <a class="pilcrow" href="#section-5">&#182;</a>
         </div>
+        <p>Create a checkbox input.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kd">var</span> <span class="nx">checkbox_input</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">vr</span><span class="p">,</span> <span class="nx">vl</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">checked</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">vl</span> <span class="o">==</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">vl</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">checked</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">checked</span> <span class="o">=</span> <span class="s2">&quot;checked=&#39;true&#39;&quot;</span>
+  <span class="p">}</span>
+  <span class="nx">parts</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+  <span class="nx">label_text</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+  <span class="nx">name</span> <span class="o">=</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;][&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+  <span class="nx">id</span> <span class="o">=</span> <span class="nx">vr</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\./m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/__+/m</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s2">&quot;&lt;div class=&#39;field&#39;&gt;&lt;label for=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">label_text</span> <span class="o">+</span> <span class="s2">&quot;&lt;/label&gt;&lt;input type=&#39;checkbox&#39; name=&#39;&quot;</span><span class="o">+</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot;&#39; id=&#39;&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;&#39; &quot;</span><span class="o">+</span><span class="nx">checked</span><span class="o">+</span><span class="s2">&quot; /&gt;&lt;/div&gt;&quot;</span>
+<span class="p">}</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
         <p>Create a file_input that doesn&rsquo;t make use of Rocket&rsquo;s upload functionality.</p>
       </td>
       <td class=code>
@@ -113,10 +139,10 @@ create a label that is linked to the input and wrap everything in an element
 <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-6'>
+    <tr id='section-7'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-6">&#182;</a>
+          <a class="pilcrow" href="#section-7">&#182;</a>
         </div>
         <p>Creates a file that makes use of Rocket&rsquo;s &ldquo;Simple Upload&rdquo;. Simple Upload reads the
 contents of a file via the javascript file API, base64 encodes it, and passes the
@@ -143,10 +169,10 @@ with your file input, or the uploads will not work.</p>
 <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-7'>
+    <tr id='section-8'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-7">&#182;</a>
+          <a class="pilcrow" href="#section-8">&#182;</a>
         </div>
         <p>Creates a file input that uses the &ldquo;Form First&rdquo; uploader. Form First does exactly what
 it sounds like; it uploads the file first, and submits the form after. Note that you
@@ -167,10 +193,10 @@ Be sure to include the extra elements with your file input.</p>
 <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-8'>
+    <tr id='section-9'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-8">&#182;</a>
+          <a class="pilcrow" href="#section-9">&#182;</a>
         </div>
         <p>Does not serve a purpose yet.</p>
 

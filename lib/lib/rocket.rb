@@ -4,6 +4,8 @@ APP_ROOT = File.join *File.dirname(File.expand_path __FILE__).split("/").slice(0
 
 require "rocket-io"
 
+require File.join(APP_ROOT, "config", "config.rb")
+
 ROCKET = Rocket.new
 
 # This compiles all of you JS and CoffeeScript files and dumps them in the

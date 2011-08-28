@@ -1,7 +1,7 @@
 require 'base64'
 require 'fileutils'
 require 'rubygems'
-require 'em-redis'
+#require 'em-redis'
 #require 'mongoid'
 #require 'em-synchrony'
 #require 'em-synchrony/em-redis'
