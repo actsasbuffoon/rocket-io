@@ -352,13 +352,11 @@ for file uploads.</p>
         
       <span class="p">}</span>
       <span class="k">else</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">val</span><span class="p">())</span> <span class="p">{</span>
-          <span class="nx">frm</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">val</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;checkbox&quot;</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">frm</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;checked&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;submit&quot;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">frm</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="s2">&quot;submit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">null</span>
-          <span class="p">}</span>
+          <span class="nx">frm</span><span class="p">.</span><span class="nx">vals</span><span class="p">[</span><span class="nx">el</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">val</span><span class="p">()</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">})</span>

@@ -40,14 +40,29 @@
 or that are merely convenient.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre><span class="k">class</span> <span class="nc">String</span>
-  </pre></div>
+        <div class='highlight'><pre></pre></div>
       </td>
     </tr>
     <tr id='section-2'>
       <td class=docs>
         <div class="pilwrap">
           <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>Mongoid initializer bombs without this.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">silence_warnings</span>
+  <span class="k">yield</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">String</span>
+  </pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
         </div>
         <p>Takes a string in the form of &ldquo;my<em>awesome</em>class&rdquo; and returns &ldquo;MyAwesomeClass&rdquo;.</p>
       </td>
@@ -61,10 +76,10 @@ or that are merely convenient.</p>
   </pre></div>
       </td>
     </tr>
-    <tr id='section-3'>
+    <tr id='section-4'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-3">&#182;</a>
+          <a class="pilcrow" href="#section-4">&#182;</a>
         </div>
         <p>Takes a string in the form of &ldquo;MyAwesomeClass&rdquo; and returns &ldquo;my<em>awesome</em>class&rdquo;.</p>
       </td>
@@ -76,10 +91,10 @@ or that are merely convenient.</p>
 <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-4'>
+    <tr id='section-5'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-4">&#182;</a>
+          <a class="pilcrow" href="#section-5">&#182;</a>
         </div>
         <p>Fix for a weird issue that causes BSON IDs to throw an argument error when you
 try to convert them to JSON.</p>
@@ -100,10 +115,10 @@ try to convert them to JSON.</p>
       </pre></div>
       </td>
     </tr>
-    <tr id='section-5'>
+    <tr id='section-6'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-5">&#182;</a>
+          <a class="pilcrow" href="#section-6">&#182;</a>
         </div>
         <p>Patch Async Sinatra to be compatible with EM-Synchrony</p>
 
