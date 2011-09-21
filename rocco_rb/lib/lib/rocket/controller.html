@@ -13,7 +13,6 @@
     <div id="jump_wrapper">
       <div id="jump_page">
           <a class="source" href="../rocket.html">rocket.rb</a>
-          <a class="source" href="bolt.html">bolt.rb</a>
           <a class="source" href="controller.html">controller.rb</a>
           <a class="source" href="initializer.html">initializer.rb</a>
           <a class="source" href="monkey_patches.html">monkey_patches.rb</a>
@@ -75,9 +74,10 @@ It also sets up an attr<em>accessor for args, params, and current</em>user, as w
 class attr_reader for storing the controller actions.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">bolted</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">included</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
       <span class="no">Rocket</span><span class="o">.</span><span class="n">controllers</span><span class="o">[</span><span class="n">other</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sr">/Controller$/</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span> <span class="o">=</span> <span class="n">other</span>
       <span class="n">other</span><span class="o">.</span><span class="n">send</span> <span class="ss">:attr_accessor</span><span class="p">,</span> <span class="ss">:args</span><span class="p">,</span> <span class="ss">:params</span><span class="p">,</span> <span class="ss">:current_user</span>
+      <span class="n">other</span><span class="o">.</span><span class="n">extend</span> <span class="no">ClassMethods</span>
       <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="n">other</span>
         <span class="kp">attr_reader</span> <span class="ss">:actions</span>
       <span class="k">end</span>
@@ -157,8 +157,7 @@ to the user to let them know the file is ready.</p>
         <span class="k">end</span>
       <span class="k">end</span>
     <span class="k">end</span>
-    
-    <span class="k">module</span> <span class="nn">InstanceMethods</span></pre></div>
+    </pre></div>
       </td>
     </tr>
     <tr id='section-8'>
@@ -174,28 +173,28 @@ care of generating the params, as I don&rsquo;t see any reason for the server
 to waste time performing the calculations.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">paramify</span><span class="p">(</span><span class="n">hsh</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">hsh</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">hsh</span><span class="o">.</span><span class="n">each_pair</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span>
-          <span class="n">chunks</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">sub</span><span class="sr"> /\]$/</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
-          <span class="k">if</span> <span class="n">chunks</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">1</span>
-            <span class="n">iter</span> <span class="o">=</span> <span class="n">t</span>
-            <span class="n">chunks</span><span class="o">.</span><span class="n">each_with_index</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
-              <span class="k">if</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">==</span> <span class="n">chunks</span><span class="o">.</span><span class="n">length</span>
-                <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">v</span>
-              <span class="k">else</span>
-                <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">||=</span> <span class="p">{}</span>
-              <span class="k">end</span>
-              <span class="n">iter</span> <span class="o">=</span> <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">paramify</span><span class="p">(</span><span class="n">hsh</span><span class="p">)</span>
+      <span class="k">return</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">hsh</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
+      <span class="n">t</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">hsh</span><span class="o">.</span><span class="n">each_pair</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="o">.</span><span class="n">sub</span><span class="sr"> /\]$/</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">chunks</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">1</span>
+          <span class="n">iter</span> <span class="o">=</span> <span class="n">t</span>
+          <span class="n">chunks</span><span class="o">.</span><span class="n">each_with_index</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">==</span> <span class="n">chunks</span><span class="o">.</span><span class="n">length</span>
+              <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">else</span>
+              <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span> <span class="o">||=</span> <span class="p">{}</span>
             <span class="k">end</span>
-          <span class="k">else</span>
-            <span class="n">t</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="n">iter</span> <span class="o">=</span> <span class="n">iter</span><span class="o">[</span><span class="n">c</span><span class="o">]</span>
           <span class="k">end</span>
+        <span class="k">else</span>
+          <span class="n">t</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">v</span>
         <span class="k">end</span>
-        <span class="n">t</span>
       <span class="k">end</span>
-      </pre></div>
+      <span class="n">t</span>
+    <span class="k">end</span>
+    </pre></div>
       </td>
     </tr>
     <tr id='section-9'>
@@ -206,10 +205,10 @@ to waste time performing the calculations.</p>
         <p>Link to the class instance variable that holds the actions.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">actions</span>
-        <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">actions</span>
-      <span class="k">end</span>
-      </pre></div>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">actions</span>
+      <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">actions</span>
+    <span class="k">end</span>
+    </pre></div>
       </td>
     </tr>
     <tr id='section-10'>
@@ -221,10 +220,10 @@ to waste time performing the calculations.</p>
 how you call one controller action from another.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">redirect</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-        <span class="no">ROCKET</span><span class="o">.</span><span class="n">parse_command</span><span class="p">(</span><span class="n">current_user</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
-      <span class="k">end</span>
-      </pre></div>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">redirect</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+      <span class="no">ROCKET</span><span class="o">.</span><span class="n">parse_command</span><span class="p">(</span><span class="n">current_user</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
+    <span class="k">end</span>
+    </pre></div>
       </td>
     </tr>
     <tr id='section-11'>
@@ -236,16 +235,15 @@ how you call one controller action from another.</p>
 user, and the paramified args.</p>
       </td>
       <td class=code>
-        <div class='highlight'><pre>      <span class="k">def</span> <span class="nf">process_command</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
-        <span class="n">command</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">to_sym</span>
-        <span class="k">if</span> <span class="n">actions</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-          <span class="vi">@current_user</span> <span class="o">=</span> <span class="n">user</span>
-          <span class="vi">@params</span> <span class="o">=</span> <span class="n">paramify</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-          <span class="nb">puts</span> <span class="s2">&quot;-&gt; </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
-          <span class="nb">self</span><span class="o">.</span><span class="n">instance_exec</span> <span class="o">&amp;</span><span class="n">actions</span><span class="o">[</span><span class="n">command</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span>
-        <span class="k">else</span>
-          <span class="k">raise</span> <span class="s2">&quot;Class </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2"> does not have an action named </span><span class="si">#{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">end</span>
+        <div class='highlight'><pre>    <span class="k">def</span> <span class="nf">process_command</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+      <span class="n">command</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">to_sym</span>
+      <span class="k">if</span> <span class="n">actions</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="vi">@current_user</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="vi">@params</span> <span class="o">=</span> <span class="n">paramify</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="nb">puts</span> <span class="s2">&quot;-&gt; </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2">.</span><span class="si">#{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">self</span><span class="o">.</span><span class="n">instance_exec</span> <span class="o">&amp;</span><span class="n">actions</span><span class="o">[</span><span class="n">command</span><span class="o">.</span><span class="n">to_sym</span><span class="o">]</span>
+      <span class="k">else</span>
+        <span class="k">raise</span> <span class="s2">&quot;Class </span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2"> does not have an action named </span><span class="si">#{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
       <span class="k">end</span>
     <span class="k">end</span>
   <span class="k">end</span>
