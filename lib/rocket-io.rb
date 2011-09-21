@@ -17,7 +17,6 @@ require 'v8'
 require 'nokogiri'
 
 require File.join("lib", "rocket", 'monkey_patches.rb')
-require File.join("lib", "rocket", 'bolt.rb')
 require File.join("lib", "rocket", 'initializer.rb')
 require File.join("lib", "rocket", 'rocket_user.rb')
 require File.join("lib", "rocket", 'controller.rb')

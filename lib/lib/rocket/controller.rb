@@ -17,9 +17,10 @@ class Rocket
     # "rocket('User.Show': {id: 1})" rather than "rocket('UserController.Show': {id: 1})".
     # It also sets up an attr_accessor for args, params, and current_user, as well as a
     # class attr_reader for storing the controller actions.
-    def self.bolted(other)
+    def self.included(other)
       Rocket.controllers[other.to_s.sub(/Controller$/, "").to_sym] = other
       other.send :attr_accessor, :args, :params, :current_user
+      other.extend ClassMethods
       class << other
         attr_reader :actions
       end
@@ -64,58 +65,56 @@ class Rocket
       end
     end
     
-    module InstanceMethods
-      # This is the code that turns your params pseudo hash into a true hash.
-      # It always groups things as a hash, even things that would normally be
-      # an array. Arrays come out as as a hash with stringified numbers as keys.
-      # That will be fixed soon. In fact, I'm considering having the client take
-      # care of generating the params, as I don't see any reason for the server
-      # to waste time performing the calculations.
-      def paramify(hsh)
-        return {} if hsh == ""
-        t = {}
-        hsh.each_pair do |k, v|
-          chunks = k.split("[").map {|s| s.sub /\]$/, ""}
-          if chunks.length > 1
-            iter = t
-            chunks.each_with_index do |c, i|
-              if i+1 == chunks.length
-                iter[c] = v
-              else
-                iter[c] ||= {}
-              end
-              iter = iter[c]
+    # This is the code that turns your params pseudo hash into a true hash.
+    # It always groups things as a hash, even things that would normally be
+    # an array. Arrays come out as as a hash with stringified numbers as keys.
+    # That will be fixed soon. In fact, I'm considering having the client take
+    # care of generating the params, as I don't see any reason for the server
+    # to waste time performing the calculations.
+    def paramify(hsh)
+      return {} if hsh == ""
+      t = {}
+      hsh.each_pair do |k, v|
+        chunks = k.split("[").map {|s| s.sub /\]$/, ""}
+        if chunks.length > 1
+          iter = t
+          chunks.each_with_index do |c, i|
+            if i+1 == chunks.length
+              iter[c] = v
+            else
+              iter[c] ||= {}
             end
-          else
-            t[k] = v
+            iter = iter[c]
           end
-        end
-        t
-      end
-      
-      # Link to the class instance variable that holds the actions.
-      def actions
-        self.class.actions
-      end
-      
-      # Not a true HTTP redirect obviously, as we aren't using HTTP. This is simply
-      # how you call one controller action from another.
-      def redirect(command)
-        ROCKET.parse_command(current_user, command)
-      end
-      
-      # This is the method that runs the controller action. It hands over the current
-      # user, and the paramified args.
-      def process_command(user, command, args, params = nil)
-        command = command.to_sym
-        if actions.include?(command)
-          @current_user = user
-          @params = paramify(args)
-          puts "-> #{self.class}.#{command}"
-          self.instance_exec &actions[command.to_sym]
         else
-          raise "Class #{self.class} does not have an action named #{command}"
+          t[k] = v
         end
+      end
+      t
+    end
+    
+    # Link to the class instance variable that holds the actions.
+    def actions
+      self.class.actions
+    end
+    
+    # Not a true HTTP redirect obviously, as we aren't using HTTP. This is simply
+    # how you call one controller action from another.
+    def redirect(command)
+      ROCKET.parse_command(current_user, command)
+    end
+    
+    # This is the method that runs the controller action. It hands over the current
+    # user, and the paramified args.
+    def process_command(user, command, args, params = nil)
+      command = command.to_sym
+      if actions.include?(command)
+        @current_user = user
+        @params = paramify(args)
+        puts "-> #{self.class}.#{command}"
+        self.instance_exec &actions[command.to_sym]
+      else
+        raise "Class #{self.class} does not have an action named #{command}"
       end
     end
   end
