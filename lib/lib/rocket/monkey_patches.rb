@@ -8,7 +8,7 @@ end
 
 class String
   
-  # Takes a string in the form of "my_awesome_class" and returns "MyAwesomeClass".
+  # Takes a string in the form of "my\_awesome\_class" and returns "MyAwesomeClass".
   def class_case
     r = self[0].upcase
     r += self[1..self.length]
@@ -16,7 +16,7 @@ class String
     r
   end
   
-  # Takes a string in the form of "MyAwesomeClass" and returns "my_awesome_class".
+  # Takes a string in the form of "MyAwesomeClass" and returns "my\_awesome\_class".
   def snake_case
     self.gsub(/([a-z])([A-Z])/) {|s| "#{s[0]}_#{s[1]}"}.gsub(/([A-Z])([A-Z][a-z])/) {|s| "#{s[0]}_#{s[1..2]}"}.downcase
   end
