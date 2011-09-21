@@ -21,7 +21,6 @@ class RocketSetup
   def create_dirs
     FileUtils.mkdir_p File.join(@opts[:n], "app", "controllers")
     FileUtils.mkdir_p File.join(@opts[:n], "app", "models")
-    FileUtils.mkdir_p File.join(@opts[:n], "app", "views")
     FileUtils.mkdir_p File.join(@opts[:n], "config", "initializers")
     FileUtils.mkdir_p File.join(@opts[:n], "lib")
     FileUtils.mkdir_p File.join(@opts[:n], "public", "stylesheets")
@@ -31,6 +30,7 @@ class RocketSetup
   end
 
   def copy_files
+    FileUtils.cp_r(File.join(LIB_DIR, "app"), File.join(CURRENT_DIR, @opts[:n]))
     FileUtils.cp(File.join(LIB_DIR, "lib", "rocket.rb"), File.join(CURRENT_DIR, @opts[:n], "lib"))
     FileUtils.cp_r(File.join(LIB_DIR, "public", "javascripts"), File.join(CURRENT_DIR, @opts[:n], "public"))
     File.open(File.join(CURRENT_DIR, @opts[:n], "config", "config.rb"), "w") {|f| f.write "APP_NAME = '#{@opts[:n]}'"}

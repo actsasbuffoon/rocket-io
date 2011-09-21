@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/actsasbuffoon/rocket-io"
   gem.license = "MIT"
   gem.summary = %Q{Realtime web application framework}
-  gem.description = %Q{Realtime web applicatioin framework that uses Web Sockets for (nearly) everything}
+  gem.description = %Q{Realtime web application framework that uses Web Sockets for (nearly) everything}
   gem.email = "michaeltomer@gmail.com"
   gem.authors = ["Michael Tomer"]
   # dependencies defined in Gemfile

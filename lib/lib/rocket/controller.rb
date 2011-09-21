@@ -15,10 +15,14 @@ class Rocket
     # This callback adds the new class to the controller hash. It strips "Controller" off
     # the end of the class name in order to simplify the API. This way you can call
     # "rocket('User.Show': {id: 1})" rather than "rocket('UserController.Show': {id: 1})".
-    # It also sets up an attr_accessor for args, params, and current_user.
+    # It also sets up an attr_accessor for args, params, and current_user, as well as a
+    # class attr_reader for storing the controller actions.
     def self.bolted(other)
       Rocket.controllers[other.to_s.sub(/Controller$/, "").to_sym] = other
       other.send :attr_accessor, :args, :params, :current_user
+      class << other
+        attr_reader :actions
+      end
     end
     
     module ClassMethods
@@ -33,11 +37,6 @@ class Rocket
       def define_action(name, &blk)
         @actions ||= {}
         @actions[name.to_sym] = blk
-      end
-      
-      # Allows you to access the class instance variable, which is tricky otherwise.
-      def actions
-        @actions
       end
       
       # This is a controller helper that sets you with with a "File First" upload.
